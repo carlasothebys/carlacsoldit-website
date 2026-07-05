@@ -1,0 +1,54 @@
+User-agent: *
+Allow: /
+
+# Block utility / internal / temp files
+Disallow: /temp-sold.html
+Disallow: /download.html
+Disallow: /backup.html
+Disallow: /update.html
+Disallow: /zipdownload.html
+Disallow: /netlify-paste.html
+Disallow: /get-listings.html
+Disallow: /carla-listings.html
+Disallow: /ihf-instructions.html
+Disallow: /temp-condos.pdf
+Disallow: /temp-condos-v2.pdf
+
+# ── CORE PAGES ──────────────────────────────
+Allow: /index.html
+Allow: /about.html
+Allow: /faq.html
+Allow: /market-news.html
+Allow: /new-construction.html
+Allow: /clubs.html
+Allow: /buyer-guide.html
+Allow: /seller-guide.html
+Allow: /wall-street-south.html
+Allow: /relocating-to-jupiter-florida.html
+Allow: /active-listings.html
+Allow: /sold-listings.html
+Allow: /search.html
+
+# ── AREA GUIDES — JUPITER & TREASURE COAST ──
+Allow: /jupiter-homes.html
+Allow: /jupiter-island.html
+Allow: /jupiter-inlet-beach-colony.html
+Allow: /tequesta.html
+Allow: /hobe-sound.html
+Allow: /sailfish-point.html
+Allow: /stuart-sewalls-point.html
+
+# ── AREA GUIDES — PALM BEACH COUNTY ────────
+Allow: /palm-beach-island.html
+Allow: /palm-beach-gardens.html
+Allow: /west-palm-beach.html
+Allow: /north-palm-beach.html
+Allow: /singer-island.html
+Allow: /manalapan.html
+Allow: /ocean-ridge.html
+Allow: /lake-worth.html
+Allow: /loxahatchee.html
+Allow: /wellington.html
+
+# Sitemap
+Sitemap: https://carlacsoldit.com/sitemap.xml

@@ -1,0 +1,2803 @@
+/*
+ * ═══════════════════════════════════════════════════════════════
+ *  CARLA CHRISTENSON — Luxury Refinement Layer  v1.0
+ *  Pure additive CSS — overrides presentation only.
+ *  Zero HTML changes. Zero SEO impact.
+ *  Load AFTER css/style.css
+ * ═══════════════════════════════════════════════════════════════
+ *
+ *  Design references: Apple · Airbnb Luxe · Robb Report ·
+ *  Architectural Digest · Four Seasons · Aman Resorts
+ *
+ *  Sections refined:
+ *  1. Design tokens (spacing, animation, shadow system)
+ *  2. Navigation polish
+ *  3. Hero refinements
+ *  4. Section spacing & breathing room
+ *  5. About section
+ *  6. Why Carla cards
+ *  7. Sold / listing cards
+ *  8. CTA sections — concierge-driven
+ *  9. Reviews
+ *  10. Areas grid
+ *  11. Contact section
+ *  12. Ticker & quick-nav
+ *  13. Button system
+ *  14. Typography hierarchy
+ *  15. Mobile — exceptional feel
+ *  16. Subtle entrance animations
+ *  17. Scroll & interaction micro-details
+ * ═══════════════════════════════════════════════════════════════
+ */
+
+/* ─────────────────────────────────────────────────────────────
+   1. REFINED DESIGN TOKENS
+───────────────────────────────────────────────────────────── */
+:root {
+  /* Luxury spacing scale */
+  --space-xs:   12px;
+  --space-sm:   24px;
+  --space-md:   48px;
+  --space-lg:   80px;
+  --space-xl:  120px;
+  --space-2xl: 160px;
+
+  /* Refined shadow system */
+  --shadow-soft:   0 2px 16px rgba(0,0,0,0.06);
+  --shadow-card:   0 8px 40px rgba(7,24,40,0.10);
+  --shadow-lift:   0 20px 60px rgba(7,24,40,0.16);
+  --shadow-deep:   0 32px 80px rgba(7,24,40,0.22);
+  --shadow-glow:   0 0 40px rgba(8,145,178,0.15);
+
+  /* Border radius — refined */
+  --radius-sm:  4px;
+  --radius-md:  10px;
+  --radius-lg:  18px;
+  --radius-xl:  28px;
+
+  /* Easing curves — Apple-quality */
+  --ease-luxury:  cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-spring:  cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth:  cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Typography scale */
+  --text-display: clamp(3rem, 6vw, 5.5rem);
+  --text-hero:    clamp(2.4rem, 4.5vw, 4.2rem);
+  --text-h2:      clamp(1.8rem, 3vw, 2.8rem);
+  --text-h3:      clamp(1.3rem, 2vw, 1.7rem);
+  --text-body:    1rem;
+  --text-sm:      0.875rem;
+  --text-xs:      0.75rem;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   2. NAVIGATION — REFINED LUXURY NAV
+───────────────────────────────────────────────────────────── */
+
+/* Deeper, more editorial dark — closer to Robb Report */
+.site-nav {
+  background: rgba(5, 14, 26, 0.97) !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.3), 0 4px 24px rgba(0,0,0,0.12);
+  transition: all 0.5s var(--ease-smooth) !important;
+}
+
+.site-nav.scrolled {
+  background: rgba(5, 14, 26, 0.99) !important;
+  box-shadow: 0 1px 0 rgba(8,145,178,0.12), 0 8px 32px rgba(0,0,0,0.25) !important;
+}
+
+/* Nav links — more editorial spacing */
+.nav-link {
+  font-size: 0.68rem !important;
+  letter-spacing: 0.14em !important;
+  font-weight: 600 !important;
+  color: rgba(255,255,255,0.78) !important;
+  padding: 10px 12px !important;
+  position: relative;
+  transition: color 0.3s var(--ease-smooth) !important;
+}
+
+/* Elegant underline hover — Apple-style */
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 12px;
+  right: 12px;
+  height: 1px;
+  background: var(--gold-lt);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.3s var(--ease-luxury);
+}
+.nav-link:hover::after { transform: scaleX(1); }
+.nav-link:hover { color: rgba(255,255,255,0.98) !important; }
+.nav-link.active { color: var(--gold-lt) !important; }
+.nav-link.active::after { transform: scaleX(1); }
+
+/* CTA nav button — warmer, more premium */
+.nav-link-cta {
+  background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%) !important;
+  border-radius: 3px !important;
+  letter-spacing: 0.12em !important;
+  font-size: 0.66rem !important;
+  padding: 10px 18px !important;
+  box-shadow: 0 2px 12px rgba(8,145,178,0.3);
+  transition: all 0.3s var(--ease-smooth) !important;
+}
+.nav-link-cta:hover {
+  background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%) !important;
+  box-shadow: 0 4px 20px rgba(8,145,178,0.45) !important;
+  transform: translateY(-1px);
+}
+.nav-link-cta::after { display: none !important; }
+
+/* Avatar — refined border */
+.nav-logo-avatar {
+  border: 1.5px solid rgba(8,145,178,0.5) !important;
+  transition: all 0.4s var(--ease-luxury) !important;
+  box-shadow: 0 0 0 3px rgba(8,145,178,0) !important;
+}
+.nav-logo:hover .nav-logo-avatar {
+  border-color: var(--gold-lt) !important;
+  box-shadow: 0 0 0 3px rgba(8,145,178,0.15) !important;
+  transform: scale(1.05) !important;
+}
+
+/* Quick-nav pill bar — more refined, less busy */
+.qnav-bar {
+  background: rgba(7, 24, 40, 0.96) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+  backdrop-filter: blur(16px) !important;
+}
+.qnav-pill {
+  font-size: 0.65rem !important;
+  letter-spacing: 0.1em !important;
+  border-radius: 3px !important;
+  transition: all 0.25s var(--ease-smooth) !important;
+  padding: 7px 14px !important;
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   3. HERO — MORE IMMERSIVE, LESS CLUTTERED
+───────────────────────────────────────────────────────────── */
+
+/* Left panel — more generous breathing room */
+.hero-split-left {
+  padding: 72px 64px 64px 72px !important;
+}
+
+/* Brokerage logo — slightly more prominent */
+.hero-logo-row { margin-bottom: 28px !important; }
+.hero-sothebys-logo {
+  opacity: 0.9 !important;
+  transition: opacity 0.3s ease !important;
+}
+
+/* Eyebrow — more refined spacing */
+.hero-eyebrow {
+  font-size: 0.66rem !important;
+  letter-spacing: 0.3em !important;
+  color: rgba(8,145,178,0.85) !important;
+  margin-bottom: 16px !important;
+}
+
+/* Name — more editorial weight */
+.hero-name {
+  font-size: clamp(2.8rem, 4.5vw, 5rem) !important;
+  line-height: 0.95 !important;
+  letter-spacing: -0.02em !important;
+  margin-bottom: 20px !important;
+}
+
+/* Division tag — lighter, less heavy */
+.hero-division-tag {
+  font-size: 0.65rem !important;
+  letter-spacing: 0.22em !important;
+  color: rgba(255,255,255,0.42) !important;
+  margin-bottom: 4px !important;
+}
+
+/* Territory */
+.hero-territory {
+  font-size: 0.78rem !important;
+  letter-spacing: 0.18em !important;
+  color: rgba(255,255,255,0.38) !important;
+  margin-bottom: 32px !important;
+}
+
+/* Credential pills — more elegant, less badge-heavy */
+.hero-cred-row { gap: 8px !important; margin-bottom: 36px !important; }
+.hero-cred-pill {
+  font-size: 0.62rem !important;
+  letter-spacing: 0.1em !important;
+  border-radius: 2px !important;
+  padding: 7px 16px !important;
+  border-color: rgba(8,145,178,0.25) !important;
+  background: rgba(8,145,178,0.04) !important;
+  transition: all 0.3s var(--ease-smooth) !important;
+}
+.hero-cred-pill:hover {
+  background: rgba(8,145,178,0.1) !important;
+  border-color: rgba(8,145,178,0.5) !important;
+}
+
+/* Actions row */
+.hero-actions { gap: 14px !important; margin-bottom: 16px !important; }
+
+/* Valuation link — lighter touch */
+.hero-valuation-link {
+  font-size: 0.68rem !important;
+  letter-spacing: 0.12em !important;
+  color: rgba(255,255,255,0.38) !important;
+  margin-bottom: 24px !important;
+  display: inline-block;
+  padding-bottom: 2px;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+  text-decoration: none !important;
+  transition: all 0.25s ease !important;
+}
+.hero-valuation-link:hover {
+  color: var(--gold-lt) !important;
+  border-bottom-color: var(--gold-lt) !important;
+}
+
+/* Stats bar — more refined proportions */
+.hero-stats {
+  background: rgba(5,14,26,0.96) !important;
+  backdrop-filter: blur(12px) !important;
+  border-top: 1px solid rgba(255,255,255,0.06) !important;
+  padding: 18px 48px !important;
+  height: auto !important;
+}
+
+.hstat { padding: 4px 32px !important; }
+.hstat-num {
+  font-size: clamp(1.4rem, 2.2vw, 2rem) !important;
+  font-weight: 300 !important;
+  letter-spacing: -0.01em !important;
+}
+.hstat-label {
+  font-size: 0.6rem !important;
+  letter-spacing: 0.16em !important;
+  color: rgba(255,255,255,0.45) !important;
+  margin-top: 3px !important;
+}
+.hstat-div {
+  width: 1px !important;
+  height: 32px !important;
+  background: rgba(255,255,255,0.08) !important;
+  align-self: center !important;
+}
+
+/* Portrait panel — richer fade */
+.hero-split-right::before {
+  background: linear-gradient(to right, rgba(5,14,26,0.7) 0%, rgba(5,14,26,0.2) 25%, transparent 45%) !important;
+}
+.hero-split-right::after {
+  height: 160px !important;
+  background: linear-gradient(to top, rgba(5,14,26,0.85) 0%, transparent 100%) !important;
+}
+
+/* Portrait frame accent — more subtle */
+.hero-portrait-frame {
+  background: linear-gradient(to bottom,
+    transparent,
+    rgba(8,145,178,0.35) 25%,
+    rgba(8,145,178,0.35) 75%,
+    transparent) !important;
+  width: 2px !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   4. SECTION SPACING — LUXURY BREATHING ROOM
+───────────────────────────────────────────────────────────── */
+
+/* More generous section padding — editorial luxury rhythm */
+.section {
+  padding: var(--space-xl) 0 !important;
+}
+
+/* Section labels — more refined eyebrow treatment */
+.section-label,
+.eyebrow {
+  font-size: 0.64rem !important;
+  letter-spacing: 0.32em !important;
+  margin-bottom: 20px !important;
+  position: relative;
+  display: inline-block;
+}
+
+/* Decorative rule under eyebrow labels */
+.section-label::before {
+  content: '';
+  display: inline-block;
+  width: 24px;
+  height: 1px;
+  background: currentColor;
+  vertical-align: middle;
+  margin-right: 12px;
+  opacity: 0.6;
+}
+
+/* Section headings — more editorial weight */
+.section-heading {
+  font-size: var(--text-h2) !important;
+  line-height: 1.08 !important;
+  letter-spacing: -0.01em !important;
+  margin-bottom: 24px !important;
+}
+
+.section-heading em {
+  font-weight: 400 !important;
+  letter-spacing: 0.01em !important;
+}
+
+/* Section body text — more readable */
+.section-sub,
+.about-bio,
+.body-text {
+  font-size: 0.975rem !important;
+  line-height: 1.9 !important;
+  color: var(--text-mid) !important;
+}
+
+/* Divider rule — more elegant */
+.rule {
+  width: 40px !important;
+  height: 1px !important;
+  background: linear-gradient(90deg, var(--gold), transparent) !important;
+  margin: 28px 0 36px !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   5. ABOUT SECTION — MORE PERSONAL, MORE PREMIUM
+───────────────────────────────────────────────────────────── */
+
+.about-section {
+  background: #fff !important;
+  position: relative;
+}
+
+/* Add a very subtle texture shimmer */
+.about-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(8,145,178,0.2), transparent);
+}
+
+.about-grid {
+  gap: 88px !important;
+  align-items: center !important;
+}
+
+/* Photo — more sculptural shadow */
+.about-headshot {
+  border-radius: 2px !important;
+  box-shadow: 
+    0 4px 24px rgba(0,0,0,0.08),
+    0 24px 80px rgba(7,24,40,0.14),
+    4px 4px 0 rgba(8,145,178,0.08) !important;
+  transition: all 0.6s var(--ease-luxury) !important;
+}
+.about-headshot:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 
+    0 8px 32px rgba(0,0,0,0.10),
+    0 32px 100px rgba(7,24,40,0.18) !important;
+}
+
+.about-sothebys-logo {
+  opacity: 0.55 !important;
+  filter: grayscale(20%) !important;
+  transition: opacity 0.3s ease !important;
+  max-width: 160px !important;
+}
+.about-photo-col:hover .about-sothebys-logo { opacity: 0.75 !important; }
+
+/* Credentials row — more editorial */
+.about-credentials {
+  border-top: 1px solid rgba(7,24,40,0.07) !important;
+  border-bottom: 1px solid rgba(7,24,40,0.07) !important;
+  padding: 32px 0 !important;
+  margin: 36px 0 40px !important;
+  gap: 48px !important;
+}
+
+.cred-num {
+  font-size: 2.2rem !important;
+  font-weight: 300 !important;
+  letter-spacing: -0.02em !important;
+  color: var(--navy) !important;
+  line-height: 1 !important;
+  margin-bottom: 6px !important;
+}
+
+.cred-label {
+  font-size: 0.6rem !important;
+  letter-spacing: 0.18em !important;
+  color: var(--text-light) !important;
+  text-transform: uppercase !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   6. WHY CARLA CARDS — REFINED LUXURY CARDS
+───────────────────────────────────────────────────────────── */
+
+.why-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 2px !important;
+  background: rgba(7,24,40,0.05) !important;
+  border: 1px solid rgba(7,24,40,0.06) !important;
+  border-radius: var(--radius-md) !important;
+  overflow: hidden !important;
+}
+
+.why-card {
+  background: #fff !important;
+  padding: 44px 36px !important;
+  border-radius: 0 !important;
+  border: none !important;
+  position: relative;
+  transition: background 0.4s var(--ease-smooth) !important;
+  cursor: default;
+}
+
+/* Elegant top accent on hover */
+.why-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  transform: scaleX(0);
+  transition: transform 0.45s var(--ease-luxury);
+}
+.why-card:hover::before { transform: scaleX(1); }
+.why-card:hover { background: #fafeff !important; }
+
+/* Icon — more refined */
+.why-icon {
+  font-size: 1.6rem !important;
+  margin-bottom: 20px !important;
+  display: block;
+  transition: transform 0.3s var(--ease-spring) !important;
+}
+.why-card:hover .why-icon { transform: scale(1.12) !important; }
+
+.why-title {
+  font-family: var(--serif) !important;
+  font-size: 1.05rem !important;
+  font-weight: 500 !important;
+  color: var(--navy) !important;
+  margin-bottom: 14px !important;
+  line-height: 1.3 !important;
+}
+
+.why-body {
+  font-size: 0.87rem !important;
+  line-height: 1.85 !important;
+  color: var(--text-mid) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   7. SOLD / LISTING CARDS — SOTHEBY'S CATALOG STYLE
+───────────────────────────────────────────────────────────── */
+
+/* Luxury sold grid — more generous */
+.luxury-sold-grid {
+  gap: 32px !important;
+}
+
+.lux-sold-card {
+  border-radius: 2px !important;
+  box-shadow: var(--shadow-card) !important;
+  border: 1px solid rgba(7,24,40,0.06) !important;
+  transition: transform 0.5s var(--ease-luxury), box-shadow 0.5s var(--ease-luxury) !important;
+}
+
+.lux-sold-card:hover {
+  transform: translateY(-10px) !important;
+  box-shadow: var(--shadow-lift) !important;
+}
+
+/* Photo — smoother zoom */
+.lsc-photo {
+  transition: transform 0.8s var(--ease-luxury) !important;
+}
+.lux-sold-card:hover .lsc-photo {
+  transform: scale(1.04) !important;
+}
+
+/* Price — more refined */
+.lsc-price {
+  font-size: 1.7rem !important;
+  font-weight: 300 !important;
+  letter-spacing: -0.01em !important;
+  color: var(--navy) !important;
+}
+
+.lsc-address {
+  font-size: 0.88rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.03em !important;
+  color: var(--text-dark) !important;
+}
+
+.lsc-location {
+  font-size: 0.75rem !important;
+  color: var(--text-light) !important;
+  letter-spacing: 0.06em !important;
+}
+
+.lsc-divider {
+  width: 32px !important;
+  height: 1px !important;
+  background: var(--gold) !important;
+  margin: 16px 0 !important;
+  opacity: 0.6;
+}
+
+/* Sold ribbon — more elegant */
+.lsc-sold-ribbon {
+  font-size: 0.58rem !important;
+  letter-spacing: 0.22em !important;
+  padding: 5px 16px 5px 12px !important;
+  background: rgba(8,145,178,0.9) !important;
+  backdrop-filter: blur(4px);
+}
+
+/* IDX card grid — more polished */
+.idx-card {
+  border-radius: var(--radius-md) !important;
+  border-color: rgba(7,24,40,0.08) !important;
+  padding: 40px 36px !important;
+  transition: all 0.4s var(--ease-luxury) !important;
+  box-shadow: var(--shadow-soft) !important;
+}
+.idx-card:hover {
+  box-shadow: var(--shadow-card) !important;
+  transform: translateY(-6px) !important;
+  border-color: rgba(8,145,178,0.2) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   8. CTA SECTIONS — CONCIERGE-DRIVEN LUXURY
+───────────────────────────────────────────────────────────── */
+
+/* Listings CTA Band */
+.listings-cta-section {
+  background: linear-gradient(135deg, #04101d 0%, #071828 50%, #04101d 100%) !important;
+  padding: var(--space-xl) 0 !important;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle grain overlay for luxury feel */
+.listings-cta-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+/* Home lead strip — upgraded */
+.home-lead-strip {
+  border-top: 1px solid rgba(255,255,255,0.06) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+  padding: var(--space-xl) 0 !important;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Gold accent line at the very top */
+.home-lead-strip::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, rgba(8,145,178,0.6) 30%, rgba(8,145,178,0.6) 70%, transparent 100%);
+}
+
+.hli-eyebrow {
+  font-size: 0.62rem !important;
+  letter-spacing: 0.3em !important;
+}
+
+.hli-headline {
+  font-size: clamp(1.9rem, 2.8vw, 2.8rem) !important;
+  font-weight: 300 !important;
+  line-height: 1.12 !important;
+  letter-spacing: -0.01em !important;
+}
+
+.hli-sub {
+  font-size: 0.92rem !important;
+  line-height: 1.8 !important;
+  color: rgba(255,255,255,0.62) !important;
+}
+
+/* Lead form box — more polished */
+.hli-form-wrap {
+  background: rgba(255,255,255,0.04) !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  border-radius: var(--radius-lg) !important;
+  padding: 40px 36px !important;
+  backdrop-filter: blur(8px) !important;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.2) !important;
+}
+
+.hli-form-title {
+  font-size: 1.3rem !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.01em !important;
+}
+
+.hli-input {
+  border-radius: 6px !important;
+  border-color: rgba(255,255,255,0.1) !important;
+  padding: 14px 18px !important;
+  font-size: 0.9rem !important;
+  transition: all 0.25s ease !important;
+}
+.hli-input:focus {
+  border-color: rgba(8,145,178,0.6) !important;
+  background: rgba(255,255,255,0.06) !important;
+  box-shadow: 0 0 0 3px rgba(8,145,178,0.08) !important;
+}
+
+/* Estimator section */
+.estimator-section {
+  padding: var(--space-xl) 0 !important;
+}
+
+.estimator-form-wrap {
+  border-radius: var(--radius-lg) !important;
+  border-color: rgba(255,255,255,0.08) !important;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.25) !important;
+}
+
+/* Network / Sotheby's section */
+.section-network {
+  padding-top: var(--space-xl) !important;
+  padding-bottom: var(--space-xl) !important;
+}
+
+.sothebys-brand-section {
+  padding: var(--space-xl) 0 !important;
+}
+
+/* Golf callout section */
+.section-golf-callout,
+.section-newcon-callout {
+  padding: var(--space-xl) 0 !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   9. REVIEWS SECTION — EDITORIAL TESTIMONIAL STYLE
+───────────────────────────────────────────────────────────── */
+
+.reviews-section {
+  background: #f8fbff !important;
+  padding: var(--space-xl) 0 !important;
+  position: relative;
+}
+
+.reviews-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(8,145,178,0.15), transparent);
+}
+
+.reviews-grid { gap: 28px !important; }
+
+.review-card {
+  border-radius: var(--radius-md) !important;
+  border: 1px solid rgba(7,24,40,0.06) !important;
+  box-shadow: var(--shadow-soft) !important;
+  padding: 40px 36px !important;
+  transition: all 0.45s var(--ease-luxury) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle top accent on hover */
+.review-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold-lt), transparent);
+  transform: scaleX(0);
+  transition: transform 0.45s var(--ease-luxury);
+}
+.review-card:hover::after { transform: scaleX(1); }
+
+.review-card:hover {
+  box-shadow: var(--shadow-card) !important;
+  transform: translateY(-6px) !important;
+  border-color: rgba(8,145,178,0.12) !important;
+}
+
+/* Opening quote mark — editorial touch */
+.review-card::before {
+  content: '\201C';
+  position: absolute;
+  top: 16px;
+  left: 24px;
+  font-family: var(--serif);
+  font-size: 6rem;
+  color: rgba(8,145,178,0.06);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
+.review-text {
+  font-size: 1.02rem !important;
+  line-height: 1.82 !important;
+  color: var(--text-dark) !important;
+  font-style: italic !important;
+  position: relative;
+  z-index: 1;
+}
+
+.review-stars {
+  font-size: 0.75rem !important;
+  letter-spacing: 4px !important;
+  color: #c9a84c !important;
+  margin-bottom: 18px !important;
+}
+
+.review-author {
+  font-size: 0.65rem !important;
+  letter-spacing: 0.16em !important;
+  color: var(--text-light) !important;
+  border-top: 1px solid rgba(7,24,40,0.07) !important;
+  padding-top: 18px !important;
+  margin-top: 4px !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   10. AREAS GRID — MORE IMMERSIVE
+───────────────────────────────────────────────────────────── */
+
+.area-card {
+  border-radius: var(--radius-md) !important;
+  overflow: hidden !important;
+  transition: all 0.55s var(--ease-luxury) !important;
+  box-shadow: var(--shadow-card) !important;
+}
+
+.area-card:hover {
+  transform: scale(1.025) !important;
+  box-shadow: var(--shadow-deep) !important;
+  z-index: 2;
+}
+
+/* Area card overlay — richer gradient */
+.area-card-overlay {
+  background: linear-gradient(
+    to top,
+    rgba(5,14,26,0.95) 0%,
+    rgba(5,14,26,0.5) 50%,
+    rgba(5,14,26,0.05) 100%
+  ) !important;
+  transition: opacity 0.45s ease !important;
+}
+
+.area-card:hover .area-card-overlay {
+  background: linear-gradient(
+    to top,
+    rgba(5,14,26,0.98) 0%,
+    rgba(5,14,26,0.65) 60%,
+    rgba(5,14,26,0.15) 100%
+  ) !important;
+}
+
+/* Area name — more editorial */
+.area-name {
+  font-size: 1.2rem !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.02em !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   11. CONTACT SECTION — WARM + PREMIUM
+───────────────────────────────────────────────────────────── */
+
+.contact-section {
+  padding: var(--space-xl) 0 !important;
+  background: linear-gradient(160deg, #04101d 0%, #071828 60%, #04101d 100%) !important;
+  position: relative;
+}
+
+/* Subtle light orb in the upper-right — warmth */
+.contact-section::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(ellipse, rgba(8,145,178,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.contact-grid { gap: 88px !important; }
+
+.contact-form-box {
+  border-radius: var(--radius-lg) !important;
+  border-color: rgba(255,255,255,0.07) !important;
+  padding: 48px !important;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.3) !important;
+  backdrop-filter: blur(8px) !important;
+  background: rgba(255,255,255,0.04) !important;
+}
+
+/* Form inputs — more refined */
+.cf-input {
+  border-radius: 6px !important;
+  border-color: rgba(255,255,255,0.1) !important;
+  padding: 14px 18px !important;
+  font-size: 0.9rem !important;
+  transition: all 0.25s ease !important;
+}
+.cf-input:focus {
+  border-color: rgba(8,145,178,0.5) !important;
+  background: rgba(255,255,255,0.06) !important;
+  box-shadow: 0 0 0 3px rgba(8,145,178,0.08) !important;
+}
+
+/* Contact submit button */
+.btn-contact-submit {
+  border-radius: 6px !important;
+  padding: 17px !important;
+  font-size: 0.76rem !important;
+  letter-spacing: 0.18em !important;
+  background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%) !important;
+  box-shadow: 0 4px 20px rgba(8,145,178,0.3) !important;
+  transition: all 0.35s var(--ease-luxury) !important;
+}
+.btn-contact-submit:hover {
+  background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%) !important;
+  box-shadow: 0 8px 32px rgba(8,145,178,0.45) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   12. TICKER — MORE EDITORIAL ELEGANCE
+───────────────────────────────────────────────────────────── */
+
+.ticker-bar {
+  background: rgba(5,14,26,0.98) !important;
+  border-top: 1px solid rgba(255,255,255,0.05) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+  padding: 16px 0 !important;
+}
+
+.ticker-label {
+  font-size: 0.58rem !important;
+  letter-spacing: 0.28em !important;
+  color: rgba(255,255,255,0.3) !important;
+  text-transform: uppercase;
+  padding: 0 28px !important;
+  border-right: 1px solid rgba(255,255,255,0.06) !important;
+  white-space: nowrap;
+}
+
+.tick-item {
+  font-size: 0.78rem !important;
+  letter-spacing: 0.06em !important;
+  color: rgba(255,255,255,0.55) !important;
+  font-weight: 400 !important;
+  font-style: italic;
+  font-family: var(--serif) !important;
+}
+
+.tick-item strong { font-weight: 500 !important; }
+.tick-dot { color: rgba(8,145,178,0.35) !important; font-size: 0.4rem !important; }
+
+/* ─────────────────────────────────────────────────────────────
+   13. BUTTON SYSTEM — REFINED LUXURY
+───────────────────────────────────────────────────────────── */
+
+/* Primary gold button */
+.btn-primary,
+.btn-gold {
+  padding: 16px 36px !important;
+  font-size: 0.72rem !important;
+  letter-spacing: 0.18em !important;
+  border-radius: 3px !important;
+  background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%) !important;
+  box-shadow: 0 4px 20px rgba(8,145,178,0.28) !important;
+  transition: all 0.35s var(--ease-luxury) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary:hover,
+.btn-gold:hover {
+  background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%) !important;
+  box-shadow: 0 8px 32px rgba(8,145,178,0.45) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Ghost button */
+.btn-ghost {
+  padding: 15px 34px !important;
+  font-size: 0.72rem !important;
+  letter-spacing: 0.16em !important;
+  border-radius: 3px !important;
+  border: 1px solid rgba(255,255,255,0.25) !important;
+  backdrop-filter: blur(4px) !important;
+  transition: all 0.35s var(--ease-luxury) !important;
+}
+
+.btn-ghost:hover {
+  border-color: rgba(8,145,178,0.5) !important;
+  background: rgba(8,145,178,0.08) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Hero outline button */
+.btn-hero-outline {
+  padding: 16px 32px !important;
+  font-size: 0.7rem !important;
+  letter-spacing: 0.16em !important;
+  border-radius: 3px !important;
+  border: 1px solid rgba(255,255,255,0.2) !important;
+  transition: all 0.35s var(--ease-luxury) !important;
+}
+.btn-hero-outline:hover {
+  border-color: rgba(8,145,178,0.45) !important;
+  background: rgba(8,145,178,0.07) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Network CTA button */
+.net-cta-btn {
+  border-radius: 3px !important;
+  font-size: 0.72rem !important;
+  letter-spacing: 0.16em !important;
+  padding: 18px 44px !important;
+  transition: all 0.4s var(--ease-luxury) !important;
+}
+.net-cta-btn:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 12px 40px rgba(8,145,178,0.4) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   14. TYPOGRAPHY — CONSISTENT HIERARCHY
+───────────────────────────────────────────────────────────── */
+
+/* Headings — tighter, more editorial */
+h1, h2, h3 {
+  font-feature-settings: "liga" 1, "kern" 1;
+  text-rendering: optimizeLegibility;
+}
+
+/* Body text — better reading rhythm */
+p {
+  max-width: 68ch; /* Optimal reading line length */
+}
+
+/* Standalone paragraphs that should span full width */
+.section-sub,
+.net-sub,
+.golf-callout-body,
+.newcon-callout-body,
+.sports-body,
+.sb-sub {
+  max-width: 640px !important;
+  line-height: 1.85 !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   15. MOBILE — EXCEPTIONAL FEEL
+───────────────────────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+
+  /* Hero — better mobile stacking */
+  .hero-split-left {
+    padding: 52px 28px 44px !important;
+    text-align: center !important;
+  }
+
+  .hero-cred-row { justify-content: center !important; }
+  .hero-actions { justify-content: center !important; flex-direction: column !important; align-items: center !important; }
+  .hero-valuation-link { text-align: center !important; }
+
+  /* Stats bar — mobile */
+  .hstat { padding: 4px 16px !important; }
+  .hstat-num { font-size: 1.2rem !important; }
+  .hstat-label { font-size: 0.55rem !important; }
+
+  /* Why grid — 2 col mobile */
+  .why-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  .why-card { padding: 32px 24px !important; }
+
+  /* Sections */
+  .section { padding: 72px 0 !important; }
+  .about-grid { gap: 48px !important; }
+  .contact-grid { gap: 48px !important; }
+  .contact-form-box { padding: 36px 28px !important; }
+  .hli-form-wrap { padding: 32px 24px !important; }
+
+  /* Reviews */
+  .review-card { padding: 32px 24px !important; }
+  .review-card::before { font-size: 5rem !important; }
+
+  /* Network stats bar — wrap nicely on mobile */
+  .net-stats-row { padding: 28px 20px !important; }
+}
+
+@media (max-width: 640px) {
+
+  /* Hero name */
+  .hero-name { font-size: clamp(2.4rem, 9vw, 3.2rem) !important; }
+
+  /* Why grid — single column on small mobile */
+  .why-grid { grid-template-columns: 1fr !important; }
+  .why-card { padding: 28px 22px !important; }
+
+  /* Sections — tighter on very small screens */
+  .section { padding: 60px 0 !important; }
+
+  /* Section container */
+  .section-container { padding: 0 22px !important; }
+
+  /* Buttons — full width on small mobile */
+  .hero-actions a,
+  .hero-actions button {
+    width: 100% !important;
+    text-align: center !important;
+    justify-content: center !important;
+  }
+
+  /* Contact form */
+  .contact-form-box { padding: 28px 20px !important; }
+  .cf-row { grid-template-columns: 1fr !important; }
+
+  /* Lead form */
+  .hli-form-wrap { padding: 28px 20px !important; }
+  .hli-direct-links { grid-template-columns: 1fr !important; }
+
+  /* Review cards */
+  .review-card { padding: 28px 20px !important; }
+  .review-card::before { display: none !important; }
+
+  /* Quick nav */
+  .qnav-pill { font-size: 0.6rem !important; padding: 6px 11px !important; }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   16. ENTRANCE ANIMATIONS — SMOOTH & EFFORTLESS
+───────────────────────────────────────────────────────────── */
+
+/* Refined reveal-up — Apple-quality fade+lift */
+.reveal-up {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s var(--ease-luxury), transform 0.8s var(--ease-luxury) !important;
+}
+.reveal-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-32px);
+  transition: opacity 0.85s var(--ease-luxury), transform 0.85s var(--ease-luxury) !important;
+}
+.reveal-left.visible { opacity: 1; transform: translateX(0); }
+
+.reveal-right {
+  opacity: 0;
+  transform: translateX(32px);
+  transition: opacity 0.85s var(--ease-luxury), transform 0.85s var(--ease-luxury) !important;
+}
+.reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+/* Staggered delay system */
+.delay-1 { transition-delay: 0.1s !important; }
+.delay-2 { transition-delay: 0.22s !important; }
+.delay-3 { transition-delay: 0.34s !important; }
+.delay-4 { transition-delay: 0.46s !important; }
+
+/* ─────────────────────────────────────────────────────────────
+   17. MICRO-DETAILS — POLISH & REFINEMENT
+───────────────────────────────────────────────────────────── */
+
+/* Selection color — brand-consistent */
+::selection {
+  background: rgba(8,145,178,0.18);
+  color: inherit;
+}
+
+/* Scrollbar — minimal luxury */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(8,145,178,0.25);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(8,145,178,0.45); }
+
+/* Focus rings — accessible but elegant */
+:focus-visible {
+  outline: 2px solid rgba(8,145,178,0.6);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Smooth anchor scroll offset — accounts for fixed nav */
+html { scroll-padding-top: 96px !important; }
+
+/* Image rendering — crisp on retina */
+img {
+  image-rendering: -webkit-optimize-contrast;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Section dividers — soft & elegant */
+.section + .section {
+  border-top: 1px solid rgba(7,24,40,0.04);
+}
+
+/* MLS search section — tighter bottom border */
+#mls-search {
+  border-top: 3px solid rgba(201,168,76,0.6) !important;
+  border-bottom: 3px solid rgba(201,168,76,0.6) !important;
+}
+
+/* Sotheby's brand section stat cards — hover polish */
+.sb-stat {
+  transition: background 0.35s var(--ease-smooth) !important;
+  cursor: default;
+}
+
+/* Market stat cards */
+.market-stat-card {
+  border-radius: var(--radius-md) !important;
+  border-top: 2px solid rgba(8,145,178,0.4) !important;
+  box-shadow: var(--shadow-soft) !important;
+  transition: all 0.4s var(--ease-luxury) !important;
+}
+.market-stat-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: var(--shadow-card) !important;
+}
+
+/* Marketing grid cards */
+.mkt-card {
+  padding: 48px 36px !important;
+  transition: background 0.4s var(--ease-smooth) !important;
+}
+
+/* Guide cards */
+.guide-card {
+  padding: 48px 40px !important;
+  transition: background 0.4s var(--ease-smooth) !important;
+}
+.guide-card:hover { background: #f5faff !important; }
+
+/* Dev cards (new construction) */
+.ncp-card {
+  border-radius: var(--radius-md) !important;
+  transition: all 0.4s var(--ease-luxury) !important;
+}
+
+/* Golf stat cards */
+.gcc-stat-card {
+  border-radius: var(--radius-md) !important;
+  transition: all 0.45s var(--ease-luxury) !important;
+}
+
+/* Network gallery items — more immersive */
+.ng-item {
+  border-radius: var(--radius-sm) !important;
+  overflow: hidden !important;
+  transition: transform 0.5s var(--ease-luxury) !important;
+}
+.ng-item:hover {
+  transform: scale(1.02) !important;
+  z-index: 2;
+}
+
+/* WhatsApp FAB — refined */
+.whatsapp-float {
+  border-radius: 50px !important;
+  font-size: 0.75rem !important;
+  letter-spacing: 0.04em !important;
+  transition: all 0.35s var(--ease-luxury) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   18. SECTION-SPECIFIC REFINEMENTS
+───────────────────────────────────────────────────────────── */
+
+/* About section — remove excess weight from the section padding */
+.about-section.section {
+  padding: var(--space-xl) 0 !important;
+}
+
+/* Sports section — stronger visual statement */
+.section-sports {
+  padding: var(--space-xl) 0 !important;
+}
+
+/* Network section — full breathing room */
+.section-network {
+  padding: var(--space-xl) 0 var(--space-2xl) !important;
+}
+
+/* Market section */
+.market-section.section {
+  padding: var(--space-xl) 0 !important;
+}
+
+/* Footer — refined */
+footer,
+.site-footer {
+  border-top: 1px solid rgba(255,255,255,0.05) !important;
+}
+
+/* Inline lead strip bullets */
+.hli-bullets li {
+  font-size: 0.88rem !important;
+  line-height: 1.7 !important;
+  color: rgba(255,255,255,0.78) !important;
+}
+
+/* Golf clubs strip tags */
+.gcl-item {
+  font-size: 0.76rem !important;
+  letter-spacing: 0.05em !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   19. AREA PAGES — LUXURY REFINEMENT (v2)
+   Targets inline-style classes used across all area pages:
+   jupiter-homes, palm-beach-island, palm-beach-gardens,
+   west-palm-beach, jupiter-island, wellington, hobe-sound,
+   tequesta, north-palm-beach, singer-island
+   Zero HTML changes. Zero SEO impact.
+───────────────────────────────────────────────────────────── */
+
+/* Area page nav — more refined, less compressed */
+.area-page-nav {
+  background: rgba(5, 10, 20, 0.98) !important;
+  padding: 18px 32px !important;
+  border-bottom: 1px solid rgba(8,145,178,0.15) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+}
+.area-page-nav a {
+  font-size: 0.78rem !important;
+  letter-spacing: 0.06em !important;
+  font-weight: 600 !important;
+  transition: color 0.25s ease !important;
+}
+.apn-links a {
+  font-size: 0.72rem !important;
+  letter-spacing: 0.08em !important;
+  color: rgba(255,255,255,0.52) !important;
+  transition: color 0.25s ease !important;
+}
+.apn-links a:hover { color: #06b6d4 !important; }
+
+/* Area hero — more generous, more editorial */
+.ap-hero {
+  padding: 100px 0 80px !important;
+  background: linear-gradient(160deg, #061828 0%, #0a2d4a 45%, #071828 100%) !important;
+  border-bottom: 1px solid rgba(8,145,178,0.12) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle ambient light in hero */
+.ap-hero::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 300px;
+  background: radial-gradient(ellipse, rgba(8,145,178,0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Hero H1 — more editorial breathing room */
+.ap-hero h1 {
+  font-size: clamp(2.2rem, 5.5vw, 3.6rem) !important;
+  line-height: 1.15 !important;
+  margin-bottom: 24px !important;
+  letter-spacing: -0.01em !important;
+}
+
+/* Hero lead paragraph — more readable */
+.ap-hero p {
+  font-size: 1.08rem !important;
+  line-height: 1.82 !important;
+  color: rgba(255,255,255,0.78) !important;
+  max-width: 640px !important;
+  margin-bottom: 36px !important;
+}
+
+/* Breadcrumb — lighter, more refined */
+.ap-breadcrumb {
+  font-size: 0.72rem !important;
+  letter-spacing: 0.06em !important;
+  color: rgba(255,255,255,0.32) !important;
+  margin-bottom: 28px !important;
+}
+
+/* Stats bar — more premium feel */
+.ap-stats-wrap {
+  background: #060f1d !important;
+  border-bottom: 1px solid rgba(8,145,178,0.1) !important;
+}
+.ap-stat {
+  padding: 36px 28px !important;
+  border-right: 1px solid rgba(8,145,178,0.08) !important;
+  transition: background 0.3s ease !important;
+}
+.ap-stat:hover { background: rgba(8,145,178,0.04) !important; }
+.ap-stat-num {
+  font-size: 2.2rem !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.01em !important;
+  line-height: 1 !important;
+  margin-bottom: 8px !important;
+  display: block !important;
+}
+.ap-stat-label {
+  font-size: 0.65rem !important;
+  letter-spacing: 0.16em !important;
+  color: rgba(255,255,255,0.42) !important;
+  margin-top: 0 !important;
+  display: block !important;
+}
+
+/* Main content container — more generous padding */
+.ap-container {
+  max-width: 1080px !important;
+  padding: 0 36px !important;
+}
+
+/* Content sections — more breathing room */
+.ap-section {
+  padding: 88px 0 !important;
+  border-bottom: 1px solid rgba(8,145,178,0.07) !important;
+}
+
+/* Section H2 — more editorial weight */
+.ap-section h2 {
+  font-size: clamp(1.7rem, 3vw, 2.4rem) !important;
+  line-height: 1.15 !important;
+  margin-bottom: 10px !important;
+  letter-spacing: -0.01em !important;
+  font-weight: 400 !important;
+}
+
+/* Section sub-heading — more readable gray */
+.ap-section-sub {
+  font-size: 0.95rem !important;
+  line-height: 1.65 !important;
+  color: rgba(255,255,255,0.42) !important;
+  margin-bottom: 44px !important;
+  letter-spacing: 0.01em !important;
+}
+
+/* Body text — the most critical improvement */
+/* Current: 0.93rem / 1.88 — refined: 1rem / 1.95 with better color */
+.ap-body {
+  font-size: 1rem !important;
+  line-height: 1.95 !important;
+  color: rgba(255,255,255,0.82) !important;
+  margin-bottom: 22px !important;
+  letter-spacing: 0.005em !important;
+}
+.ap-body strong { color: #fff !important; }
+.ap-body a { color: #06b6d4 !important; transition: color 0.2s ease !important; }
+.ap-body a:hover { color: #38bdf8 !important; }
+
+/* Neighborhood grid — more generous cards */
+.ap-nbhd-grid {
+  gap: 24px !important;
+}
+.ap-nbhd {
+  padding: 32px 28px !important;
+  border-radius: 8px !important;
+  border: 1px solid rgba(8,145,178,0.15) !important;
+  background: rgba(255,255,255,0.035) !important;
+  transition: border-color 0.3s var(--ease-luxury), transform 0.35s var(--ease-luxury), background 0.3s ease !important;
+}
+.ap-nbhd:hover {
+  border-color: rgba(6,182,212,0.4) !important;
+  transform: translateY(-4px) !important;
+  background: rgba(255,255,255,0.055) !important;
+}
+.ap-nbhd h3 {
+  font-size: 1.15rem !important;
+  margin-bottom: 8px !important;
+  line-height: 1.25 !important;
+  letter-spacing: -0.005em !important;
+}
+.ap-nbhd-price {
+  font-size: 0.72rem !important;
+  margin-bottom: 12px !important;
+  letter-spacing: 0.07em !important;
+}
+.ap-nbhd p {
+  font-size: 0.9rem !important;
+  line-height: 1.78 !important;
+  color: rgba(255,255,255,0.62) !important;
+}
+.ap-nbhd p a { color: #0891b2 !important; }
+
+/* Tags — more refined */
+.ap-tag {
+  font-size: 0.65rem !important;
+  letter-spacing: 0.06em !important;
+  padding: 4px 11px !important;
+  border-radius: 20px !important;
+  margin: 3px 3px 0 0 !important;
+}
+
+/* Buyer profiles section */
+.buyer-section {
+  padding: 88px 0 !important;
+  border-bottom: 1px solid rgba(8,145,178,0.07) !important;
+}
+.buyer-intro {
+  font-size: 1rem !important;
+  line-height: 1.92 !important;
+  color: rgba(255,255,255,0.78) !important;
+  max-width: 820px !important;
+  margin-bottom: 44px !important;
+}
+.buyer-grid {
+  gap: 18px !important;
+  margin-bottom: 32px !important;
+}
+.buyer-card {
+  padding: 28px 20px !important;
+  border-radius: 10px !important;
+  border: 1px solid rgba(6,182,212,0.14) !important;
+  background: rgba(255,255,255,0.03) !important;
+  transition: border-color 0.3s ease, transform 0.3s var(--ease-luxury), background 0.3s ease !important;
+}
+.buyer-card:hover {
+  border-color: rgba(6,182,212,0.38) !important;
+  transform: translateY(-4px) !important;
+  background: rgba(255,255,255,0.05) !important;
+}
+.buyer-icon { font-size: 1.9rem !important; margin-bottom: 12px !important; }
+.buyer-name {
+  font-size: 1.05rem !important;
+  margin-bottom: 6px !important;
+  line-height: 1.3 !important;
+}
+.buyer-title {
+  font-size: 0.65rem !important;
+  letter-spacing: 0.08em !important;
+  margin-bottom: 8px !important;
+}
+.buyer-note {
+  font-size: 0.8rem !important;
+  line-height: 1.65 !important;
+  color: rgba(255,255,255,0.48) !important;
+}
+
+/* CTA section — more immersive */
+.ap-cta {
+  padding: 100px 0 !important;
+  background: linear-gradient(150deg, #071828 0%, #0a3055 50%, #071828 100%) !important;
+  position: relative;
+  overflow: hidden;
+}
+.ap-cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(8,145,178,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.ap-cta h2 {
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem) !important;
+  line-height: 1.2 !important;
+  margin-bottom: 16px !important;
+  letter-spacing: -0.01em !important;
+  font-weight: 400 !important;
+  position: relative;
+}
+.ap-cta p {
+  font-size: 1rem !important;
+  line-height: 1.8 !important;
+  color: rgba(255,255,255,0.6) !important;
+  max-width: 540px !important;
+  margin-bottom: 40px !important;
+  position: relative;
+}
+
+/* CTA buttons — refined */
+.btn-ap-gold {
+  padding: 17px 40px !important;
+  font-size: 0.8rem !important;
+  letter-spacing: 0.12em !important;
+  border-radius: 3px !important;
+  background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%) !important;
+  box-shadow: 0 4px 20px rgba(8,145,178,0.32) !important;
+  transition: all 0.35s var(--ease-luxury) !important;
+}
+.btn-ap-gold:hover {
+  background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%) !important;
+  box-shadow: 0 8px 36px rgba(8,145,178,0.48) !important;
+  transform: translateY(-2px) !important;
+}
+.btn-ap-outline {
+  padding: 16px 30px !important;
+  font-size: 0.78rem !important;
+  letter-spacing: 0.1em !important;
+  border-radius: 3px !important;
+  border: 1px solid rgba(8,145,178,0.38) !important;
+  transition: all 0.3s var(--ease-luxury) !important;
+}
+.btn-ap-outline:hover {
+  border-color: rgba(6,182,212,0.65) !important;
+  background: rgba(6,182,212,0.08) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* SEO keyword section — less prominent, more editorial */
+.seo-kw-section {
+  padding: 48px 0 !important;
+  background: rgba(3,8,16,0.6) !important;
+  border-bottom: 1px solid rgba(8,145,178,0.06) !important;
+}
+.seo-kw-pill {
+  font-size: 0.7rem !important;
+  padding: 6px 14px !important;
+  border-radius: 20px !important;
+  color: rgba(255,255,255,0.45) !important;
+  border: 1px solid rgba(8,145,178,0.12) !important;
+  background: rgba(8,145,178,0.04) !important;
+  transition: all 0.2s ease !important;
+}
+.seo-kw-pill:hover {
+  color: rgba(255,255,255,0.7) !important;
+  border-color: rgba(8,145,178,0.25) !important;
+}
+
+/* Related areas section */
+.ap-related {
+  padding: 80px 0 !important;
+  border-bottom: 1px solid rgba(8,145,178,0.07) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   20. GLOBAL BODY TEXT & TYPOGRAPHY — SITE-WIDE REFINEMENT
+   Targets the core reading experience on all pages
+───────────────────────────────────────────────────────────── */
+
+/* Base body — improved font rendering site-wide */
+body {
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
+}
+
+/* Paragraph rhythm — breathing room between paragraphs */
+p + p {
+  margin-top: 0.75em;
+}
+
+/* Line length cap — optimal readability on all light pages */
+.body-text,
+.section-sub,
+.about-bio {
+  font-size: 1.02rem !important;
+  line-height: 1.92 !important;
+  letter-spacing: 0.005em !important;
+}
+
+/* About page body text — critical readability improvement */
+.about-text p,
+.about-body p,
+.guide-text p,
+.content-body p {
+  font-size: 1rem;
+  line-height: 1.88;
+  margin-bottom: 1.2em;
+  color: var(--text-mid);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   21. ABOUT PAGE — REFINED EDITORIAL PRESENTATION
+───────────────────────────────────────────────────────────── */
+
+/* About page hero sections */
+.about-hero,
+.page-hero {
+  position: relative;
+}
+
+/* About page content improvements — if inline content uses these patterns */
+.about-section .container p,
+.about-section .ap-container p {
+  font-size: 1rem;
+  line-height: 1.9;
+  margin-bottom: 1.1em;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   22. FAQ, BUYER GUIDE, SELLER GUIDE — READABILITY
+───────────────────────────────────────────────────────────── */
+
+/* FAQ accordion items — more readable */
+.faq-item,
+.faq-q,
+.faq-answer {
+  line-height: 1.85 !important;
+}
+
+/* FAQ answer text — slightly larger for readability */
+.faq-answer p,
+.faq-a p {
+  font-size: 0.97rem !important;
+  line-height: 1.88 !important;
+  color: var(--text-mid) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   23. MOBILE AREA PAGES — EXCEPTIONAL BREATHING ROOM
+───────────────────────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+
+  /* Area page nav — better mobile */
+  .area-page-nav {
+    padding: 14px 20px !important;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .apn-links {
+    gap: 14px !important;
+    flex-wrap: wrap;
+  }
+  .apn-links a { font-size: 0.7rem !important; }
+
+  /* Hero */
+  .ap-hero { padding: 72px 0 60px !important; }
+  .ap-hero h1 { font-size: clamp(1.9rem, 7vw, 2.6rem) !important; margin-bottom: 20px !important; }
+  .ap-hero p { font-size: 0.98rem !important; line-height: 1.78 !important; }
+
+  /* Stats — 2-column grid */
+  .ap-stats { grid-template-columns: 1fr 1fr !important; }
+  .ap-stat { padding: 28px 20px !important; }
+  .ap-stat-num { font-size: 1.8rem !important; }
+
+  /* Container */
+  .ap-container { padding: 0 24px !important; }
+
+  /* Sections */
+  .ap-section { padding: 64px 0 !important; }
+  .buyer-section { padding: 64px 0 !important; }
+  .ap-cta { padding: 72px 0 !important; }
+
+  /* Section headings */
+  .ap-section h2 { font-size: clamp(1.5rem, 5vw, 2rem) !important; }
+  .ap-section-sub { margin-bottom: 32px !important; font-size: 0.88rem !important; }
+
+  /* Body text — slightly tighter on mobile but still readable */
+  .ap-body {
+    font-size: 0.97rem !important;
+    line-height: 1.88 !important;
+  }
+
+  /* Neighborhood grid */
+  .ap-nbhd-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
+  .ap-nbhd { padding: 28px 24px !important; }
+
+  /* Buyer grid — always 2-col on tablet */
+  .buyer-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 14px !important; }
+  .buyer-intro { font-size: 0.95rem !important; line-height: 1.85 !important; margin-bottom: 32px !important; }
+
+  /* CTA */
+  .ap-cta h2 { font-size: clamp(1.6rem, 5vw, 2.2rem) !important; }
+  .ap-cta p { font-size: 0.95rem !important; }
+
+  /* Buttons */
+  .btn-ap-outline { margin: 12px 0 0 !important; display: block !important; text-align: center !important; }
+}
+
+@media (max-width: 640px) {
+
+  /* Area hero */
+  .ap-hero { padding: 56px 0 48px !important; }
+  .ap-hero h1 { font-size: clamp(1.7rem, 8.5vw, 2.2rem) !important; }
+  .ap-hero p { font-size: 0.93rem !important; }
+
+  /* Container */
+  .ap-container { padding: 0 18px !important; }
+
+  /* Sections */
+  .ap-section { padding: 52px 0 !important; }
+  .buyer-section { padding: 52px 0 !important; }
+  .ap-cta { padding: 56px 0 !important; }
+
+  /* Body text */
+  .ap-body { font-size: 0.95rem !important; line-height: 1.85 !important; }
+
+  /* Stats — single column on very small screens */
+  .ap-stats { grid-template-columns: 1fr 1fr !important; }
+  .ap-stat { padding: 22px 16px !important; }
+  .ap-stat-num { font-size: 1.55rem !important; }
+  .ap-stat-label { font-size: 0.6rem !important; }
+
+  /* Buyer grid — single column on small mobile */
+  .buyer-grid { grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
+  .buyer-card { padding: 22px 16px !important; }
+  .buyer-note { display: none; } /* hide verbose notes on very small screens */
+
+  /* CTA buttons */
+  .btn-ap-gold, .btn-ap-outline {
+    width: 100% !important;
+    display: block !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
+  }
+  .btn-ap-outline { margin-left: 0 !important; }
+
+  /* Nav links — hide on very small screens to prevent overflow */
+  .apn-links { display: none !important; }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   24. TWO-COLUMN CONTENT GRIDS ON AREA PAGES
+   The inline style="display:grid;grid-template-columns:1fr 1fr"
+   doesn't have responsive breakpoints — this fixes that
+───────────────────────────────────────────────────────────── */
+
+/* Target the inline two-column body text grids on area pages */
+@media (max-width: 768px) {
+  .ap-section [style*="grid-template-columns:1fr 1fr"],
+  .ap-section [style*="grid-template-columns: 1fr 1fr"],
+  .buyer-section [style*="grid-template-columns:1fr 1fr"],
+  .buyer-section [style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 0 !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   25. LOCKED SECTION WALL — REFINED GATE PRESENTATION
+   area-unlock.js injects .area-wall — ensure it looks premium
+───────────────────────────────────────────────────────────── */
+
+.area-wall {
+  background: linear-gradient(to top, #071828 30%, rgba(7,24,40,0.0) 100%) !important;
+  min-height: 280px !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: center !important;
+  padding-bottom: 48px !important;
+}
+
+/* Modal — refined luxury presentation */
+.area-modal-overlay {
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  background: rgba(3, 8, 18, 0.88) !important;
+}
+
+.area-modal {
+  border-radius: 12px !important;
+  border: 1px solid rgba(8,145,178,0.2) !important;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04) !important;
+  padding: 48px 44px !important;
+  max-width: 460px !important;
+  background: linear-gradient(160deg, #071828 0%, #0a2540 100%) !important;
+}
+
+.area-modal h3 {
+  font-size: 1.5rem !important;
+  line-height: 1.2 !important;
+  margin-bottom: 10px !important;
+  font-weight: 400 !important;
+}
+
+.area-modal p {
+  font-size: 0.92rem !important;
+  line-height: 1.75 !important;
+  color: rgba(255,255,255,0.6) !important;
+  margin-bottom: 28px !important;
+}
+
+.area-modal input {
+  border-radius: 6px !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  padding: 13px 16px !important;
+  font-size: 0.92rem !important;
+  background: rgba(255,255,255,0.06) !important;
+  color: #fff !important;
+  transition: border-color 0.25s ease, background 0.25s ease !important;
+}
+.area-modal input:focus {
+  border-color: rgba(8,145,178,0.55) !important;
+  background: rgba(255,255,255,0.08) !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(8,145,178,0.1) !important;
+}
+
+.area-modal button[type="submit"],
+.area-modal .area-submit-btn {
+  border-radius: 4px !important;
+  padding: 15px !important;
+  font-size: 0.8rem !important;
+  letter-spacing: 0.14em !important;
+  background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%) !important;
+  box-shadow: 0 4px 20px rgba(8,145,178,0.35) !important;
+  transition: all 0.3s var(--ease-luxury) !important;
+  border: none !important;
+  cursor: pointer !important;
+  width: 100% !important;
+  color: #fff !important;
+  text-transform: uppercase !important;
+  font-weight: 700 !important;
+}
+.area-modal button[type="submit"]:hover,
+.area-modal .area-submit-btn:hover {
+  background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%) !important;
+  box-shadow: 0 8px 32px rgba(8,145,178,0.48) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   26. CLUBS & NEW CONSTRUCTION PAGE — REFINEMENTS
+───────────────────────────────────────────────────────────── */
+
+/* clubs.html and new-construction.html use similar inline styles */
+/* Ensure adequate body text spacing on those pages too */
+.locked-content p,
+.club-description p,
+.ncp-body p {
+  font-size: 0.97rem !important;
+  line-height: 1.88 !important;
+  margin-bottom: 1em !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   27. SITE-WIDE MOBILE CONTAINER PADDING
+   Prevents text from touching screen edges on mobile
+───────────────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .container {
+    padding-left: 22px !important;
+    padding-right: 22px !important;
+  }
+
+  /* Prevent full-bleed headlines from being too large on small screens */
+  .section-heading {
+    font-size: clamp(1.7rem, 7.5vw, 2.4rem) !important;
+    line-height: 1.15 !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   28. IMAGE BREATHING ROOM — PHOTOGRAPHY PRESENTATION
+───────────────────────────────────────────────────────────── */
+
+/* Hero photos on area pages — ensure they breathe */
+.ap-hero img,
+.ap-section img:not([class]) {
+  border-radius: 4px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+
+/* Prevent cramped images in two-col grids */
+.ap-section img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   29. PRINT — PRESERVE SEO CONTENT, CLEAN PRESENTATION
+───────────────────────────────────────────────────────────── */
+
+@media print {
+  .area-page-nav,
+  .area-modal-overlay,
+  .whatsapp-float,
+  .site-nav { display: none !important; }
+
+  .ap-body, p {
+    color: #000 !important;
+    font-size: 11pt !important;
+    line-height: 1.6 !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   30. ABOUT PAGE — ab- CLASS SYSTEM REFINEMENT
+   about.html uses .ab-nav, .ab-hero, .ab-section, .ab-body,
+   .ab-cred-card, .ab-spec-item, .ab-tl-item, .ab-phil-item
+───────────────────────────────────────────────────────────── */
+
+.ab-nav {
+  background: rgba(5, 12, 24, 0.98) !important;
+  padding: 16px 32px !important;
+  border-bottom: 1px solid rgba(8,145,178,0.18) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+}
+.ab-nav-home { font-size: 0.8rem !important; letter-spacing: 0.04em !important; }
+.ab-nav-links a {
+  font-size: 0.7rem !important;
+  letter-spacing: 0.1em !important;
+  padding: 7px 14px !important;
+  transition: color 0.2s ease, background 0.2s ease !important;
+}
+.ab-nav-cta {
+  padding: 9px 18px !important;
+  border-radius: 3px !important;
+  font-size: 0.72rem !important;
+  letter-spacing: 0.1em !important;
+  box-shadow: 0 2px 12px rgba(8,145,178,0.3) !important;
+}
+
+.ab-hero { padding: 96px 0 72px !important; }
+.ab-hero-inner { gap: 80px !important; align-items: start !important; }
+.ab-photo {
+  border-radius: 6px !important;
+  box-shadow:
+    0 4px 24px rgba(0,0,0,0.12),
+    0 24px 72px rgba(7,24,40,0.18),
+    0 0 0 1px rgba(8,145,178,0.06) !important;
+  transition: all 0.6s var(--ease-luxury) !important;
+}
+.ab-photo-badge {
+  font-size: 0.68rem !important;
+  letter-spacing: 0.14em !important;
+  padding: 9px 22px !important;
+  bottom: -18px !important;
+  box-shadow: 0 6px 20px rgba(8,145,178,0.4) !important;
+}
+.ab-name { letter-spacing: -0.01em !important; line-height: 1.08 !important; }
+.ab-title {
+  font-size: 0.98rem !important;
+  line-height: 1.6 !important;
+  margin-bottom: 32px !important;
+  color: #4a6a84 !important;
+}
+.ab-stat-num { font-size: 1.35rem !important; margin-bottom: 4px !important; }
+.ab-stat-label {
+  font-size: 0.58rem !important;
+  letter-spacing: 0.08em !important;
+  margin-top: 6px !important;
+}
+
+.ab-section { padding: 80px 0 !important; border-top: 1px solid rgba(8,145,178,0.1) !important; }
+.ab-section h2 {
+  font-size: clamp(1.6rem, 3vw, 2.2rem) !important;
+  line-height: 1.15 !important;
+  margin-bottom: 10px !important;
+  letter-spacing: -0.01em !important;
+}
+.ab-section-sub {
+  font-size: 0.92rem !important;
+  line-height: 1.65 !important;
+  margin-bottom: 40px !important;
+  color: #5a7a94 !important;
+}
+
+/* About body text — primary readability fix */
+.ab-body {
+  font-size: 1.02rem !important;
+  line-height: 1.95 !important;
+  color: #2d4a62 !important;
+  margin-bottom: 22px !important;
+  letter-spacing: 0.005em !important;
+}
+
+.ab-bio-grid { gap: 64px !important; }
+
+.ab-cred-grid { gap: 20px !important; }
+.ab-cred-card {
+  padding: 32px 28px !important;
+  border-radius: 10px !important;
+  border: 1px solid rgba(8,145,178,0.14) !important;
+  box-shadow: 0 2px 16px rgba(7,24,40,0.06) !important;
+  transition: all 0.4s var(--ease-luxury) !important;
+}
+.ab-cred-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 12px 40px rgba(7,24,40,0.12) !important;
+  border-color: rgba(8,145,178,0.28) !important;
+}
+.ab-cred-icon { font-size: 2.2rem !important; margin-bottom: 16px !important; }
+.ab-cred-title { font-size: 1.05rem !important; margin-bottom: 8px !important; line-height: 1.3 !important; }
+.ab-cred-body { font-size: 0.85rem !important; line-height: 1.72 !important; color: #5a7a94 !important; }
+
+.ab-spec-item {
+  padding: 24px 22px !important;
+  border-radius: 8px !important;
+  border: 1px solid rgba(8,145,178,0.12) !important;
+  box-shadow: 0 2px 10px rgba(7,24,40,0.05) !important;
+  transition: all 0.35s var(--ease-luxury) !important;
+  gap: 18px !important;
+}
+.ab-spec-item:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 10px 32px rgba(7,24,40,0.1) !important;
+  border-color: rgba(8,145,178,0.25) !important;
+}
+.ab-spec-title { font-size: 1rem !important; margin-bottom: 6px !important; }
+.ab-spec-desc { font-size: 0.85rem !important; line-height: 1.7 !important; color: #5a7a94 !important; }
+
+.ab-tl-item { margin-bottom: 36px !important; }
+.ab-tl-year { font-size: 0.68rem !important; letter-spacing: 0.14em !important; }
+.ab-tl-title { font-size: 1.05rem !important; margin: 4px 0 6px !important; line-height: 1.3 !important; }
+.ab-tl-body { font-size: 0.87rem !important; line-height: 1.72 !important; color: #5a7a94 !important; }
+
+.ab-phil-item {
+  padding: 24px 20px !important;
+  border-radius: 10px !important;
+  border: 1px solid rgba(8,145,178,0.14) !important;
+  transition: all 0.35s var(--ease-luxury) !important;
+}
+.ab-phil-item:hover {
+  transform: translateY(-3px) !important;
+  border-color: rgba(8,145,178,0.28) !important;
+  background: rgba(8,145,178,0.1) !important;
+}
+.ab-phil-icon { font-size: 1.8rem !important; margin-bottom: 10px !important; }
+.ab-phil-name { font-size: 0.82rem !important; letter-spacing: 0.02em !important; line-height: 1.4 !important; }
+
+.ab-cta {
+  padding: 88px 0 !important;
+  background: linear-gradient(135deg, rgba(8,145,178,0.07) 0%, rgba(8,145,178,0.04) 100%) !important;
+  border-top: 1px solid rgba(8,145,178,0.18) !important;
+}
+.ab-cta h2 {
+  font-size: clamp(1.7rem, 3.5vw, 2.5rem) !important;
+  line-height: 1.15 !important;
+  margin-bottom: 14px !important;
+  letter-spacing: -0.01em !important;
+}
+.ab-cta p { font-size: 1rem !important; line-height: 1.8 !important; margin-bottom: 32px !important; }
+.ab-btn-gold {
+  padding: 15px 32px !important;
+  font-size: 0.8rem !important;
+  letter-spacing: 0.12em !important;
+  border-radius: 3px !important;
+  box-shadow: 0 4px 16px rgba(8,145,178,0.28) !important;
+  transition: all 0.3s var(--ease-luxury) !important;
+}
+.ab-btn-gold:hover { transform: translateY(-2px) !important; box-shadow: 0 8px 28px rgba(8,145,178,0.42) !important; }
+.ab-btn-outline {
+  padding: 14px 28px !important;
+  font-size: 0.8rem !important;
+  letter-spacing: 0.1em !important;
+  border-radius: 3px !important;
+  transition: all 0.3s var(--ease-luxury) !important;
+}
+.ab-btn-outline:hover { transform: translateY(-2px) !important; }
+
+@media (max-width: 900px) {
+  .ab-hero { padding: 72px 0 52px !important; }
+  .ab-section { padding: 60px 0 !important; }
+  .ab-body { font-size: 0.97rem !important; line-height: 1.88 !important; }
+  .ab-cta { padding: 64px 0 !important; }
+  .ab-hero-inner { gap: 48px !important; }
+}
+@media (max-width: 600px) {
+  .ab-nav { padding: 12px 18px !important; }
+  .ab-hero { padding: 56px 0 44px !important; }
+  .ab-section { padding: 48px 0 !important; }
+  .ab-cred-grid { grid-template-columns: 1fr !important; }
+  .ab-bio-grid { gap: 32px !important; }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   31. FAQ PAGE — faq- CLASS SYSTEM REFINEMENT
+───────────────────────────────────────────────────────────── */
+
+.faq-nav {
+  background: rgba(5, 10, 20, 0.98) !important;
+  padding: 18px 32px !important;
+  border-bottom: 1px solid rgba(8,145,178,0.15) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+}
+.faq-nav-brand { font-size: 0.82rem !important; letter-spacing: 0.06em !important; }
+.faq-nav-links a { font-size: 0.72rem !important; letter-spacing: 0.06em !important; transition: color 0.2s ease !important; }
+
+.faq-hero {
+  padding: 96px 28px 72px !important;
+  background: linear-gradient(160deg, #061828 0%, #0a2d4a 50%, #071828 100%) !important;
+  border-bottom: 1px solid rgba(8,145,178,0.1) !important;
+}
+.faq-hero h1 {
+  font-size: clamp(2rem, 5.5vw, 3.2rem) !important;
+  line-height: 1.15 !important;
+  margin-bottom: 20px !important;
+  letter-spacing: -0.01em !important;
+}
+.faq-hero-sub {
+  font-size: 1.05rem !important;
+  line-height: 1.8 !important;
+  color: rgba(255,255,255,0.72) !important;
+  margin-bottom: 36px !important;
+}
+.faq-hero-breadcrumb { font-size: 0.72rem !important; letter-spacing: 0.06em !important; margin-bottom: 24px !important; }
+.faq-hero-meta { font-size: 0.72rem !important; color: rgba(255,255,255,0.3) !important; }
+
+.faq-wrap { padding: 0 32px !important; }
+.faq-layout { gap: 64px !important; padding: 72px 0 96px !important; }
+
+.faq-sidebar-title { font-size: 0.65rem !important; letter-spacing: 0.18em !important; margin-bottom: 20px !important; }
+.faq-toc a { padding: 12px 0 !important; font-size: 0.82rem !important; line-height: 1.4 !important; }
+.faq-sidebar-cta { padding: 24px !important; border-radius: 10px !important; border: 1px solid rgba(8,145,178,0.25) !important; }
+.faq-sidebar-cta p { font-size: 0.85rem !important; line-height: 1.65 !important; margin-bottom: 18px !important; }
+.faq-sidebar-cta a { border-radius: 4px !important; font-size: 0.8rem !important; letter-spacing: 0.08em !important; padding: 13px 16px !important; }
+
+.faq-category { margin-bottom: 80px !important; scroll-margin-top: 100px !important; }
+.faq-category-header { padding-bottom: 20px !important; margin-bottom: 36px !important; gap: 16px !important; }
+.faq-category-title { font-size: 1.55rem !important; line-height: 1.2 !important; }
+
+/* FAQ accordion — the primary readability fix on this page */
+.faq-item {
+  border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+  transition: background 0.2s ease !important;
+}
+.faq-item:hover { background: rgba(255,255,255,0.018) !important; }
+
+.faq-q { padding: 22px 12px !important; gap: 14px !important; }
+.faq-q-text {
+  font-size: 0.97rem !important;
+  line-height: 1.55 !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.005em !important;
+}
+
+/* FAQ answers — most critical */
+.faq-a {
+  padding: 0 16px 28px 42px !important;
+  font-size: 0.95rem !important;
+  line-height: 1.92 !important;
+  color: rgba(255,255,255,0.72) !important;
+  letter-spacing: 0.005em !important;
+}
+.faq-a p { font-size: 0.95rem !important; line-height: 1.92 !important; margin-bottom: 0.9em !important; }
+.faq-a ul, .faq-a ol { padding-left: 1.4em !important; margin: 0.7em 0 !important; }
+.faq-a li { line-height: 1.8 !important; margin-bottom: 0.4em !important; }
+
+.faq-related { padding: 72px 0 !important; border-top: 1px solid rgba(8,145,178,0.12) !important; }
+.faq-related-title { font-size: clamp(1.4rem, 3vw, 1.8rem) !important; margin-bottom: 40px !important; letter-spacing: -0.01em !important; }
+.faq-rel-card {
+  padding: 28px 24px !important;
+  border-radius: 10px !important;
+  border: 1px solid rgba(8,145,178,0.15) !important;
+  transition: all 0.35s var(--ease-luxury) !important;
+}
+.faq-rel-card:hover {
+  transform: translateY(-4px) !important;
+  border-color: rgba(8,145,178,0.4) !important;
+  background: rgba(255,255,255,0.05) !important;
+}
+.faq-rel-name { font-size: 1.05rem !important; margin-bottom: 8px !important; }
+.faq-rel-desc { font-size: 0.82rem !important; line-height: 1.65 !important; }
+
+.faq-cta {
+  padding: 80px 28px !important;
+  background: linear-gradient(150deg, #071828 0%, #0a3055 50%, #071828 100%) !important;
+  border-top: 1px solid rgba(8,145,178,0.15) !important;
+}
+.faq-cta h2 {
+  font-size: clamp(1.7rem, 3.5vw, 2.4rem) !important;
+  line-height: 1.18 !important;
+  margin-bottom: 16px !important;
+  letter-spacing: -0.01em !important;
+}
+.faq-cta p { font-size: 1rem !important; line-height: 1.8 !important; margin-bottom: 32px !important; }
+.btn-gold-cta, .btn-outline-cta {
+  font-size: 0.82rem !important;
+  letter-spacing: 0.08em !important;
+  padding: 15px 30px !important;
+  border-radius: 4px !important;
+  transition: all 0.3s var(--ease-luxury) !important;
+}
+.btn-gold-cta { box-shadow: 0 4px 16px rgba(8,145,178,0.3) !important; }
+.btn-gold-cta:hover { transform: translateY(-2px) !important; box-shadow: 0 8px 28px rgba(8,145,178,0.42) !important; }
+.btn-outline-cta:hover { transform: translateY(-2px) !important; }
+.faq-footer { padding: 32px 28px !important; font-size: 0.72rem !important; letter-spacing: 0.03em !important; line-height: 1.7 !important; }
+
+@media (max-width: 820px) {
+  .faq-hero { padding: 72px 24px 56px !important; }
+  .faq-layout { padding: 52px 0 72px !important; gap: 40px !important; }
+  .faq-wrap { padding: 0 24px !important; }
+  .faq-a { font-size: 0.92rem !important; line-height: 1.85 !important; }
+  .faq-category { margin-bottom: 56px !important; }
+}
+@media (max-width: 600px) {
+  .faq-hero { padding: 56px 20px 44px !important; }
+  .faq-hero h1 { font-size: clamp(1.7rem, 8vw, 2.2rem) !important; }
+  .faq-q { padding: 18px 8px !important; }
+  .faq-q-text { font-size: 0.92rem !important; }
+  .faq-a { padding: 0 8px 24px 32px !important; font-size: 0.9rem !important; }
+  .faq-wrap { padding: 0 18px !important; }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   32. CLUBS PAGE — seo- / club- CLASS SYSTEM REFINEMENT
+───────────────────────────────────────────────────────────── */
+
+.seo-nav {
+  background: rgba(5, 10, 20, 0.98) !important;
+  padding: 18px 32px !important;
+  border-bottom: 1px solid rgba(8,145,178,0.15) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+}
+.seo-nav a { font-size: 0.8rem !important; letter-spacing: 0.06em !important; }
+.seo-nav-links a { color: rgba(255,255,255,0.55) !important; font-size: 0.72rem !important; transition: color 0.2s ease !important; }
+
+.seo-hero {
+  padding: 100px 0 76px !important;
+  background: linear-gradient(160deg, #061828 0%, #0a3055 50%, #071828 100%) !important;
+}
+.seo-hero h1 {
+  font-size: clamp(2rem, 5.5vw, 3.4rem) !important;
+  line-height: 1.15 !important;
+  margin-bottom: 20px !important;
+  letter-spacing: -0.01em !important;
+}
+.seo-hero p {
+  font-size: 1.05rem !important;
+  line-height: 1.8 !important;
+  color: rgba(255,255,255,0.78) !important;
+  margin-bottom: 32px !important;
+}
+.seo-breadcrumb { font-size: 0.72rem !important; letter-spacing: 0.06em !important; margin-bottom: 28px !important; }
+.seo-container { padding: 0 36px !important; }
+
+.seo-intro { padding: 60px 0 !important; }
+.seo-intro-grid { gap: 20px !important; margin-top: 36px !important; }
+.seo-stat {
+  padding: 28px 20px !important;
+  border-radius: 10px !important;
+  border: 1px solid rgba(8,145,178,0.12) !important;
+  box-shadow: 0 2px 12px rgba(7,24,40,0.06) !important;
+  transition: all 0.35s var(--ease-luxury) !important;
+}
+.seo-stat:hover { transform: translateY(-3px) !important; box-shadow: 0 10px 32px rgba(7,24,40,0.1) !important; border-color: rgba(8,145,178,0.25) !important; }
+.seo-stat-num { font-size: 2.2rem !important; letter-spacing: -0.02em !important; margin-bottom: 6px !important; }
+.seo-stat-label { font-size: 0.7rem !important; letter-spacing: 0.12em !important; }
+
+.seo-section { padding: 80px 0 !important; border-bottom: 1px solid rgba(0,0,0,0.07) !important; }
+.seo-section h2 {
+  font-size: clamp(1.65rem, 3vw, 2.3rem) !important;
+  line-height: 1.15 !important;
+  margin-bottom: 10px !important;
+  letter-spacing: -0.01em !important;
+}
+.seo-section-sub { font-size: 0.94rem !important; line-height: 1.65 !important; margin-bottom: 40px !important; color: #777 !important; }
+
+/* Club detail cards — the centerpiece of this page */
+.club-detail-card {
+  padding: 40px !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(7,24,40,0.1) !important;
+  box-shadow: 0 4px 20px rgba(7,24,40,0.06) !important;
+  margin-bottom: 36px !important;
+  transition: all 0.4s var(--ease-luxury) !important;
+}
+.club-detail-card:hover {
+  box-shadow: 0 12px 48px rgba(7,24,40,0.1) !important;
+  transform: translateY(-2px) !important;
+  border-color: rgba(8,145,178,0.15) !important;
+}
+.club-detail-card h3 {
+  font-size: 1.55rem !important;
+  line-height: 1.2 !important;
+  margin-bottom: 6px !important;
+  letter-spacing: -0.01em !important;
+}
+.club-detail-tagline { font-size: 0.72rem !important; letter-spacing: 0.12em !important; margin-bottom: 20px !important; }
+.club-detail-desc {
+  font-size: 0.97rem !important;
+  line-height: 1.88 !important;
+  color: #4a5a6a !important;
+  margin: 20px 0 !important;
+}
+.club-detail-fees { gap: 10px !important; margin: 24px 0 !important; }
+.cdf-row { padding: 10px 14px !important; border-radius: 6px !important; font-size: 0.87rem !important; }
+.club-badge-pill { font-size: 0.66rem !important; letter-spacing: 0.1em !important; padding: 5px 14px !important; }
+
+.club-seo-table { font-size: 0.92rem !important; }
+.club-seo-table th { padding: 14px 18px !important; font-size: 0.72rem !important; letter-spacing: 0.1em !important; }
+.club-seo-table td { padding: 13px 18px !important; line-height: 1.5 !important; }
+
+.cta-bar {
+  padding: 88px 0 !important;
+  background: linear-gradient(150deg, #071828 0%, #0a3055 50%, #071828 100%) !important;
+}
+.cta-bar h2 {
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem) !important;
+  line-height: 1.18 !important;
+  margin-bottom: 16px !important;
+  letter-spacing: -0.01em !important;
+}
+.cta-bar p { font-size: 1rem !important; line-height: 1.8 !important; margin-bottom: 32px !important; }
+.btn-gold-solid {
+  padding: 17px 40px !important;
+  font-size: 0.8rem !important;
+  letter-spacing: 0.14em !important;
+  border-radius: 3px !important;
+  box-shadow: 0 4px 20px rgba(8,145,178,0.3) !important;
+  transition: all 0.35s var(--ease-luxury) !important;
+}
+.btn-gold-solid:hover { transform: translateY(-2px) !important; box-shadow: 0 8px 32px rgba(8,145,178,0.45) !important; }
+.btn-outline-white {
+  padding: 15px 36px !important;
+  font-size: 0.8rem !important;
+  letter-spacing: 0.12em !important;
+  border-radius: 3px !important;
+  margin-left: 14px !important;
+  transition: all 0.3s ease !important;
+}
+.btn-outline-white:hover { transform: translateY(-2px) !important; }
+
+@media (max-width: 900px) {
+  .seo-hero { padding: 72px 0 56px !important; }
+  .seo-container { padding: 0 24px !important; }
+  .seo-intro-grid { grid-template-columns: 1fr 1fr !important; }
+  .seo-section { padding: 60px 0 !important; }
+  .club-detail-card { padding: 28px 24px !important; }
+  .club-detail-fees { grid-template-columns: 1fr !important; }
+  .btn-outline-white { margin-left: 0 !important; margin-top: 12px !important; display: block !important; }
+}
+@media (max-width: 600px) {
+  .seo-hero { padding: 56px 0 44px !important; }
+  .seo-hero h1 { font-size: clamp(1.7rem, 8vw, 2.2rem) !important; }
+  .seo-container { padding: 0 18px !important; }
+  .seo-intro-grid { grid-template-columns: 1fr 1fr !important; }
+  .seo-stat { padding: 20px 14px !important; }
+  .seo-section { padding: 48px 0 !important; }
+  .cta-bar { padding: 64px 0 !important; }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   33. SECONDARY AREA PAGES — CARD-BASED STAT SYSTEM
+   stuart, sailfish, manalapan, ocean-ridge, jupiter-inlet,
+   lake-worth, loxahatchee use .ap-stats as card grid not bar
+───────────────────────────────────────────────────────────── */
+
+/* Card-style stat grids (not the sticky bar version) */
+.ap-stats:not(.ap-stats-bar) {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) !important;
+  gap: 18px !important;
+  padding: 48px 0 !important;
+}
+.ap-stats .ap-stat {
+  padding: 32px 24px !important;
+  border-radius: 10px !important;
+  border: 1px solid rgba(8,145,178,0.18) !important;
+  background: rgba(8,145,178,0.05) !important;
+  transition: all 0.35s var(--ease-luxury) !important;
+  text-align: center !important;
+}
+.ap-stats .ap-stat:hover {
+  transform: translateY(-4px) !important;
+  border-color: rgba(8,145,178,0.35) !important;
+  background: rgba(8,145,178,0.09) !important;
+}
+
+/* Secondary area hero with background image */
+.ap-hero-bg {
+  opacity: 0.25 !important;
+  transition: opacity 0.4s ease !important;
+}
+.ap-hero:hover .ap-hero-bg { opacity: 0.3 !important; }
+
+/* ─────────────────────────────────────────────────────────────
+   34. WALL STREET SOUTH — ARTICLE PAGE REFINEMENT
+───────────────────────────────────────────────────────────── */
+
+.art-hero { min-height: 600px !important; }
+.art-hero-inner { padding: 80px 40px 72px !important; max-width: 860px !important; }
+
+/* Article body — critical: this is long-form reading content */
+.art-body {
+  font-size: 1.05rem !important;
+  line-height: 1.95 !important;
+  letter-spacing: 0.01em !important;
+}
+.art-body p {
+  font-size: 1.05rem !important;
+  line-height: 1.95 !important;
+  margin-bottom: 1.35em !important;
+  color: var(--text-mid, #334e68) !important;
+}
+.art-body h2 {
+  font-size: clamp(1.5rem, 2.8vw, 2rem) !important;
+  margin-top: 2.5em !important;
+  margin-bottom: 0.8em !important;
+  line-height: 1.2 !important;
+  letter-spacing: -0.01em !important;
+}
+.art-body h3 {
+  font-size: clamp(1.15rem, 2vw, 1.45rem) !important;
+  margin-top: 2em !important;
+  margin-bottom: 0.6em !important;
+  line-height: 1.25 !important;
+}
+.art-body ul, .art-body ol { padding-left: 1.6em !important; margin: 1em 0 1.4em !important; }
+.art-body li { line-height: 1.82 !important; margin-bottom: 0.5em !important; font-size: 1.02rem !important; }
+
+/* Pullquotes */
+.art-pullquote, blockquote {
+  border-left: 3px solid rgba(8,145,178,0.5) !important;
+  padding: 24px 32px !important;
+  margin: 2em 0 !important;
+  background: rgba(8,145,178,0.04) !important;
+  border-radius: 0 8px 8px 0 !important;
+}
+.art-pullquote p, blockquote p {
+  font-size: 1.12rem !important;
+  line-height: 1.75 !important;
+  font-style: italic !important;
+  margin-bottom: 0 !important;
+}
+
+/* Article sections */
+.art-section { padding: 80px 0 !important; }
+
+/* ─────────────────────────────────────────────────────────────
+   35. BUYER / SELLER GUIDES — READABILITY
+───────────────────────────────────────────────────────────── */
+
+.guide-card {
+  padding: 44px 40px !important;
+  border-radius: 10px !important;
+  border: 1px solid rgba(7,24,40,0.08) !important;
+  box-shadow: 0 2px 16px rgba(7,24,40,0.06) !important;
+  transition: all 0.4s var(--ease-luxury) !important;
+}
+.guide-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 16px 48px rgba(7,24,40,0.1) !important;
+  border-color: rgba(8,145,178,0.15) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   36. GLOBAL INLINE LINK REFINEMENTS
+───────────────────────────────────────────────────────────── */
+
+/* Consistent link hover in body text across all pages */
+.ap-body a,
+.ab-body a,
+.faq-a a,
+.art-body a,
+.body-text a,
+.section-sub a {
+  color: #0891b2 !important;
+  text-decoration: none !important;
+  border-bottom: 1px solid rgba(8,145,178,0.28) !important;
+  padding-bottom: 1px !important;
+  transition: color 0.2s ease, border-color 0.2s ease !important;
+}
+.ap-body a:hover,
+.ab-body a:hover,
+.faq-a a:hover,
+.art-body a:hover,
+.body-text a:hover,
+.section-sub a:hover {
+  color: #06b6d4 !important;
+  border-bottom-color: rgba(6,182,212,0.55) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   37. FOOTER — SITE-WIDE
+───────────────────────────────────────────────────────────── */
+
+.site-footer {
+  border-top: 1px solid rgba(255,255,255,0.05) !important;
+}
+.footer-copy,
+.faq-footer,
+footer p {
+  font-size: 0.75rem !important;
+  line-height: 1.75 !important;
+  letter-spacing: 0.03em !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   38. REDUCED MOTION — ACCESSIBILITY
+───────────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-up,
+  .reveal-left,
+  .reveal-right {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .area-card,
+  .review-card,
+  .why-card,
+  .lux-sold-card,
+  .ab-cred-card,
+  .ab-spec-item,
+  .faq-rel-card,
+  .club-detail-card,
+  .ap-nbhd,
+  .buyer-card,
+  .seo-stat,
+  .ap-stats .ap-stat {
+    transition: none !important;
+  }
+
+  .area-card:hover,
+  .lux-sold-card:hover,
+  .ab-cred-card:hover,
+  .faq-rel-card:hover,
+  .club-detail-card:hover,
+  .ap-nbhd:hover,
+  .seo-stat:hover {
+    transform: none !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   39. GLOBAL MOBILE / CONTAINER GAP AUDIT
+       Fixes surfaced by full style.css audit — §39 additions
+       target the handful of components that lacked adequate
+       mobile breathing room after the base responsive breakpoints.
+───────────────────────────────────────────────────────────── */
+
+/* ── Marketing Edge cards — padding never reduced on mobile ── */
+@media (max-width: 640px) {
+  .edge-card {
+    padding: 40px 28px !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .edge-card {
+    padding: 32px 20px !important;
+  }
+}
+
+/* ── Container — extra breathing room at very small screens ── */
+@media (max-width: 420px) {
+  .container {
+    padding: 0 16px !important;
+  }
+  .nav-inner {
+    padding: 0 14px !important;
+  }
+}
+
+/* ── Footer inner — tighten side padding at 640px ─────────── */
+@media (max-width: 640px) {
+  .footer-inner {
+    padding: 0 20px 48px !important;
+  }
+  .footer-bottom {
+    padding: 24px 20px !important;
+  }
+}
+
+/* ── About stats row — allow wrapping on very small screens ── */
+@media (max-width: 480px) {
+  .about-stats-row {
+    flex-wrap: wrap !important;
+    gap: 20px !important;
+  }
+  .stat-div {
+    display: none !important;
+  }
+  .about-stat {
+    flex: 1 1 40% !important;
+    min-width: 80px !important;
+  }
+}
+
+/* ── Market counties — reduce padding at very small screens ── */
+@media (max-width: 480px) {
+  .market-counties {
+    padding: 20px 16px !important;
+  }
+  .market-cta {
+    padding: 32px 20px !important;
+  }
+  .market-meter-wrap {
+    padding: 24px 16px !important;
+  }
+}
+
+/* ── Listings launch — tighten at very small screens ───────── */
+@media (max-width: 480px) {
+  .listings-launch {
+    padding: 24px 16px !important;
+  }
+  .off-market-cta {
+    padding: 28px 16px !important;
+  }
+}
+
+/* ── Clubs intro strip — breathing room on tiny screens ────── */
+@media (max-width: 480px) {
+  .clubs-intro-strip {
+    padding: 16px 12px !important;
+  }
+  .cis-item {
+    padding: 8px 12px !important;
+    width: 100% !important;
+    text-align: left !important;
+  }
+  .cis-div {
+    display: none !important;
+  }
+}
+
+/* ── Condos CTA bar — padding at very small screens ────────── */
+@media (max-width: 480px) {
+  .condos-cta-bar {
+    padding: 24px 16px !important;
+  }
+}
+
+/* ── Sold feature body — additional padding reduction at 420px */
+@media (max-width: 420px) {
+  .sold-feature-body {
+    padding: 28px 18px !important;
+  }
+  .sold-feature-price {
+    font-size: 2rem !important;
+  }
+}
+
+/* ── Contact form / estimator — reduce at 420px ─────────────  */
+@media (max-width: 420px) {
+  .contact-form,
+  .est-form {
+    padding: 24px 16px !important;
+  }
+}
+
+/* ── Section spacing — micro-reduction at very small screens ── */
+@media (max-width: 420px) {
+  .section {
+    padding: 56px 0 !important;
+  }
+  .section-heading {
+    font-size: clamp(1.6rem, 8vw, 2.2rem) !important;
+    margin-bottom: 40px !important;
+  }
+}
+
+/* ── Team grid — tighten card padding on mobile ─────────────── */
+@media (max-width: 640px) {
+  .team-info {
+    padding: 22px 20px !important;
+  }
+}
+
+/* ── Sports section eyebrow + stats on very small screens ───── */
+@media (max-width: 420px) {
+  .sports-eyebrow-bar {
+    padding: 16px 16px 0 !important;
+  }
+  .seb-text {
+    font-size: 0.72rem !important;
+    padding: 8px 16px !important;
+  }
+}
+
+/* ── Clubs grid — zero side padding on smallest screens ─────── */
+@media (max-width: 420px) {
+  .clubs-grid,
+  .clubs-grid.tier-3 {
+    padding: 0 12px !important;
+  }
+}
+
+/* ── Float bar — tighten at 420px ──────────────────────────── */
+@media (max-width: 420px) {
+  .float-bar {
+    padding: 10px 12px !important;
+    gap: 6px !important;
+  }
+  .float-btn {
+    padding: 9px 12px !important;
+    font-size: 0.65rem !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   40. SAILFISH-POINT CLASS NAMESPACE AUDIT
+       sailfish-point.html uses .apc container + .apnav
+       (not .ap-container / .area-page-nav) — add refinements
+───────────────────────────────────────────────────────────── */
+
+/* Container width — already inherits .ap-container max-width
+   via shared class naming, but .apc is unique */
+.apc {
+  max-width: 1100px !important;
+  margin: 0 auto !important;
+  padding: 0 28px !important;
+  box-sizing: border-box !important;
+}
+
+@media (max-width: 640px) {
+  .apc {
+    padding: 0 18px !important;
+  }
+}
+
+/* Nav on sailfish-point uses .apnav — ensure refinement parity */
+.apnav {
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border-bottom: 1px solid rgba(8,145,178,0.18) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   41. STUART-SEWALLS-POINT — .ap-stats CARD GRID REFINEMENT
+       Stuart uses .ap-stats as a card grid (not a bar).
+       §33 already targets .ap-stats:not(.ap-stats-bar).
+       This section adds the 4-column→2-column→1-column cascade.
+───────────────────────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+  .ap-stats {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (max-width: 540px) {
+  .ap-stats {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   END OF LUXURY REFINEMENT LAYER v2
+   All rules are additive overrides — zero SEO impact
+   Zero H1/H2/schema/alt/URL/sitemap changes
+   Pure presentation layer only
+
+   v1 (§1–18):  Homepage refinements
+   v2 (§19–29): Area pages, typography, mobile, gate modal
+   v2 (§30–38): About, FAQ, Clubs, article pages, guides,
+                 secondary areas, links, footer, a11y
+   v2 (§39–41): Global mobile gap audit, sailfish namespace,
+                 stuart stats grid cascade
+───────────────────────────────────────────────────────────── */

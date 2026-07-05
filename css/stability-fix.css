@@ -1,0 +1,582 @@
+/* ═══════════════════════════════════════════════════════════════════
+   CARLA CHRISTENSON — STABILITY FIX
+   Version: 1.0
+   Date: 2025
+   Scope: CLS / shaking / jumping / horizontal overflow elimination
+   Rules:
+     · NO redesign
+     · NO SEO changes
+     · NO layout restructuring
+     · CSS presentation layer ONLY
+     · All fixes use !important where competing with luxury-refinement.css
+   ─────────────────────────────────────────────────────────────────
+   CONFIRMED CAUSES ADDRESSED:
+     1. Reveal animations (translateX) causing horizontal overflow + scroll
+     2. Hero parallax JS writing inline transform every scroll tick
+     3. sports-bg will-change:transform causing compositor layer flicker
+     4. Mobile drawer overflow:hidden causing scrollbar-width jump
+     5. 100dvh hero causing Safari layout shift when address bar hides
+     6. Nav backdrop-filter transition causing repaint jank on scroll
+     7. Card hover translateY causing overflow and micro-scroll
+     8. Area card scale(1.025) hover overflowing parent container
+     9. Overshoot spring easing (cubic-bezier with >1 y value) causing
+        visible snap-back on reveal-right elements
+    10. body/html missing scrollbar-gutter reservation (width jump
+        when overflow changes between hidden/auto/scroll)
+    11. Sentinel divs appended to body.offsetTop recalculated after
+        lazy content loads — minor reflow source
+   ═══════════════════════════════════════════════════════════════════ */
+
+
+/* ─────────────────────────────────────────────────────────────────
+   §1. HTML / BODY — HARD OVERFLOW LOCK
+   Prevents any translateX or wide element from causing horizontal
+   scroll AND the classic 2–4px page-width jump when a scrollbar
+   appears/disappears (mobile drawer open, modal open, etc.)
+   ───────────────────────────────────────────────────────────────── */
+html {
+  overflow-x: hidden !important;
+  /* Reserve scrollbar gutter so page width never shifts when
+     vertical scrollbar appears/disappears */
+  scrollbar-gutter: stable;
+  /* BOUNCE FIX: Override style.css line 31 which sets scroll-behavior:smooth.
+     Smooth scroll causes the browser to animate any programmatic scroll calls
+     including those made by third-party scripts (ihf-kestrel.js SPA router).
+     We use scrollToSection() for smooth scrolling explicitly — so the global
+     setting should always be 'auto' (instant). */
+  scroll-behavior: auto !important;
+  /* BOUNCE FIX: Disable scroll anchoring — when DOM content is added above
+     the viewport (e.g. IDX widget loads), scroll-anchoring tries to keep the
+     user's position by adjusting scrollTop, which causes a visible jump. */
+  overflow-anchor: none !important;
+}
+
+body {
+  overflow-x: hidden !important;
+  /* Prevent width jumping when drawer sets overflow:hidden.
+     Stable gutter means page width is always the same whether
+     scrollbar is visible or not. */
+  scrollbar-gutter: stable;
+  /* Will-change none on body — prevents accidental compositing */
+  will-change: unset;
+  /* BOUNCE FIX: disable scroll anchoring on body too */
+  overflow-anchor: none !important;
+}
+
+/* BOUNCE FIX: Disable scroll anchoring on ALL elements.
+   The browser's scroll-anchor algorithm can cause jumps when new content
+   loads (IDX search widget, lazy images, etc.). Disabling globally is safe —
+   we control scroll position explicitly via scrollToSection(). */
+*, *::before, *::after {
+  overflow-anchor: none !important;
+}
+
+/* Safety: every section is also overflow-safe on x-axis */
+.section,
+.hero,
+.hero-split,
+.section-sports {
+  overflow-x: hidden !important;
+}
+
+
+/* Body when drawer/lightbox is open — prevents overflow + width jump */
+body.drawer-open {
+  overflow-y: hidden !important;
+  /* scrollbar-gutter:stable already set on html/body above,
+     so this only stops Y scroll, never changes width */
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   §2. REVEAL ANIMATIONS — ELIMINATE HORIZONTAL SHIFT
+   Root cause: .reveal-left / .reveal-right use translateX(±32–50px).
+   Elements near viewport edges overflow the body before .visible,
+   triggering horizontal scrollbar flash + page-width jump.
+   Fix: collapse the X travel to 0, keep the Y lift + opacity fade.
+   Invisible change — user sees the same fade-up effect.
+   ───────────────────────────────────────────────────────────────── */
+
+/* Kill the X-axis travel entirely — replace with pure opacity+Y */
+.reveal-left {
+  opacity: 0 !important;
+  transform: translateY(16px) !important;    /* was translateX(-32px / -50px) */
+  transition: opacity 0.85s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              transform 0.85s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+  /* Prevent the invisible element from extending beyond viewport */
+  overflow: hidden;
+}
+.reveal-left.visible {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+.reveal-right {
+  opacity: 0 !important;
+  transform: translateY(16px) !important;   /* was translateX(32px / 50px) */
+  transition: opacity 0.85s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              transform 0.85s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+  overflow: hidden;
+}
+.reveal-right.visible {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* Tighten reveal-up Y travel to reduce visible "pop" */
+.reveal-up {
+  opacity: 0 !important;
+  transform: translateY(20px) !important;   /* was 28px / 40px */
+  transition: opacity 0.75s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              transform 0.75s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+}
+.reveal-up.visible {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+
+/* ─────────────────────────────────────────────────────────────────
+   §3. HERO — STABILIZE DVH + PARALLAX CONTAINER
+   100dvh on mobile Safari: when address bar shows/hides the viewport
+   height changes dynamically, causing the hero to resize and push
+   all content down, creating a visible jump.
+   Fix: pin hero to 100svh (small viewport = stable) on mobile,
+   fall back to 100vh on desktop where dvh is not an issue.
+   ───────────────────────────────────────────────────────────────── */
+
+/* Homepage hero split — remove dynamic viewport height dependency */
+.hero.hero-split {
+  /* Use svh (small viewport — stable, doesn't change when bars hide)
+     instead of dvh (dynamic — changes, causing reflow) */
+  min-height: calc(100svh - var(--nav-h, 80px)) !important;
+}
+
+/* Non-split hero (area pages, etc.) */
+.hero:not(.hero-split) {
+  height: calc(100svh - 200px) !important;
+  /* Keep original min/max as guardrails */
+}
+
+/* hero-media layer: stop the parallax JS from fighting the layout.
+   The JS writes heroMedia.style.transform every scroll event.
+   This doesn't cause CLS by itself but the translateY combined with
+   the oversized height (110%) can cause a visible bottom-edge flicker.
+   We clamp with contain so transforms stay inside the element. */
+.hero-media {
+  /* contain:layout prevents layout recalc propagating upward */
+  contain: layout style;
+  will-change: transform;
+}
+
+/* Portrait image — no aspect-ratio declared in HTML, set it in CSS
+   so the browser reserves space before image loads */
+.hero-portrait-img {
+  aspect-ratio: 3 / 4 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  /* Block pointer-events on the image itself to prevent hover repaint */
+  will-change: unset !important;
+}
+
+/* The portrait wrap fills its parent — contains the image */
+.hero-portrait-wrap {
+  position: absolute !important;
+  inset: 0 !important;
+  overflow: hidden !important;
+}
+
+
+/* ─────────────────────────────────────────────────────────────────
+   §4. SPORTS BG — PARALLAX CONTAINMENT
+   .sports-bg has will-change:transform and inset:-80px 0.
+   The negative inset extends it 80px above/below the section,
+   which can create a visible overflow flicker when the compositor
+   promotes it to its own layer and re-paints the bounds.
+   Fix: contain the transform to the section, ensure the parent
+   clips correctly, and stop will-change from promoting everything.
+   ───────────────────────────────────────────────────────────────── */
+.section-sports {
+  /* Isolation creates a stacking context — keeps the bg layer
+     strictly inside the section, no bleed to adjacent sections */
+  isolation: isolate !important;
+  contain: layout !important;
+  overflow: hidden !important;
+}
+
+.sports-bg {
+  /* Keep will-change only on transform — not 'auto' which is too broad */
+  will-change: transform !important;
+  /* Backface-visibility:hidden forces GPU compositing of just this layer,
+     preventing the main thread from triggering a full repaint on scroll */
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
+  /* transform3d hint tells the GPU this element moves */
+  transform: translateZ(0) !important;
+}
+
+
+/* ─────────────────────────────────────────────────────────────────
+   §5. NAV — STABILIZE BACKDROP-FILTER TRANSITION
+   backdrop-filter:blur() changing on scroll is one of the most
+   expensive GPU operations. Every time .scrolled is toggled,
+   the browser re-composites the blurred layer. On mobile this
+   causes a visible judder.
+   Fix: remove the blur from the transition, only animate background
+   and box-shadow (much cheaper). Keep blur as a static value.
+   ───────────────────────────────────────────────────────────────── */
+.site-nav {
+  /* Freeze backdrop-filter — no animation on blur */
+  transition: background 0.3s ease, box-shadow 0.3s ease !important;
+  /* Static blur — never changes, no repaint trigger */
+  backdrop-filter: blur(16px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(160%) !important;
+}
+
+.site-nav.scrolled {
+  /* Same blur level — compositor layer stays warm, no re-promotion */
+  backdrop-filter: blur(16px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(160%) !important;
+}
+
+/* Quick-nav bar: also freeze its backdrop blur */
+.qnav-bar {
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+
+
+/* ─────────────────────────────────────────────────────────────────
+   §6. CARD HOVER LIFTS — PREVENT OVERFLOW SCROLL
+   Several card hovers use transform:translateY(-4px to -10px).
+   When the card is near the edge of its grid container the translateY
+   can extend slightly beyond the container bounds and trigger a brief
+   scrollbar or content-shift.
+   Fix: add overflow:hidden to all card grid containers, and clamp
+   the translateY values to a safe maximum.
+   ───────────────────────────────────────────────────────────────── */
+
+/* Sold cards — was translateY(-10px), reduce to -6px */
+.lux-sold-card:hover {
+  transform: translateY(-6px) !important;
+}
+
+/* Review cards — was -6px, already fine but contain the grid */
+.reviews-grid {
+  overflow: hidden !important;
+}
+
+/* Area cards — was scale(1.025) which is the WORST for CLS.
+   A scale on a grid item pushes it to overlap neighbours, causing
+   a real layout shift. Replace with translateY only. */
+.area-card:hover {
+  transform: translateY(-4px) !important;  /* was scale(1.025) */
+  box-shadow: var(--shadow-deep) !important;
+  z-index: 2;
+}
+
+/* IDX cards */
+.idx-card:hover {
+  transform: translateY(-4px) !important;  /* was -6px */
+}
+
+/* Network gallery items — scale(1.02) is fine for contained items */
+.ng-item {
+  /* Ensure the gallery grid clips scale overflow */
+  overflow: hidden !important;
+}
+
+/* Market stat cards */
+.market-stat-card:hover {
+  transform: translateY(-3px) !important;  /* was -4px */
+}
+
+
+/* ─────────────────────────────────────────────────────────────────
+   §7. BUTTON HOVER LIFTS — MICRO-STABILITY
+   Multiple buttons use translateY(-1px to -3px) on hover.
+   These are very small and rarely cause CLS alone, but combined
+   with the other effects they add up.
+   Cap all button lifts to -1px.
+   ───────────────────────────────────────────────────────────────── */
+.btn-primary:hover,
+.btn-gold:hover,
+.btn-ghost:hover,
+.btn-hero-outline:hover,
+.btn-contact-submit:hover,
+.net-cta-btn:hover,
+.nav-link-cta:hover {
+  transform: translateY(-1px) !important;  /* was -2px to -3px */
+}
+
+
+/* ─────────────────────────────────────────────────────────────────
+   §8. REMOVE OVERSHOOT (SPRING) EASING FROM LAYOUT PROPERTIES
+   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1) has y values > 1,
+   meaning the animation overshoots its end value before settling.
+   When applied to transform: scale() or translateY() this creates
+   a visible snap-back that looks like shaking/jumping.
+   Fix: replace spring easing with a standard ease-out on all
+   properties that affect visual position/size.
+   ───────────────────────────────────────────────────────────────── */
+
+/* Any element that uses spring easing on a transform — override */
+.why-card:hover .why-icon {
+  /* was transition: transform 0.3s var(--ease-spring) */
+  transform: scale(1.08) !important;       /* was 1.12 */
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+}
+
+/* About headshot hover */
+.about-headshot:hover {
+  transform: translateY(-3px) !important;  /* was -4px */
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+}
+
+/* Nav avatar hover */
+.nav-logo:hover .nav-logo-avatar {
+  transform: scale(1.04) !important;       /* was 1.05 */
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+}
+
+
+/* ─────────────────────────────────────────────────────────────────
+   §9. MOBILE — EXTRA STABILIZATION
+   On mobile Safari the address bar resizing, rubber-band scroll,
+   and fixed positioned elements all interact badly.
+   ───────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  /* Prevent hero from resizing when Safari address bar hides */
+  .hero.hero-split {
+    min-height: calc(100svh - var(--nav-h, 80px)) !important;
+    /* Prevent layout shift from min-height change */
+    height: auto !important;
+  }
+
+  /* On mobile, disable X-travel completely on all reveals */
+  .reveal-left,
+  .reveal-right,
+  .reveal-up {
+    transform: translateY(12px) !important;
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out !important;
+  }
+  .reveal-left.visible,
+  .reveal-right.visible,
+  .reveal-up.visible {
+    transform: translateY(0) !important;
+  }
+
+  /* Disable parallax-style transforms on mobile — they cause jank */
+  .sports-bg {
+    /* On mobile: freeze the sports background, no parallax */
+    transform: none !important;
+    will-change: unset !important;
+    /* Ensure it still fills the section */
+    inset: 0 !important;
+  }
+
+  /* Disable hero parallax on mobile — handled by JS stopping at
+     window.scrollY < window.innerHeight but mobile still jitters */
+  .hero-media {
+    will-change: unset !important;
+    transform: none !important;
+  }
+
+  /* All card hovers disabled on mobile — touch doesn't have hover
+     but the :hover state can fire on tap, causing instant shift */
+  .lux-sold-card:hover,
+  .review-card:hover,
+  .area-card:hover,
+  .idx-card:hover,
+  .market-stat-card:hover,
+  .ap-nbhd:hover {
+    transform: none !important;
+  }
+
+  /* Fix mobile drawer scrollbar-gutter — opening drawer used to
+     jump page width. scrollbar-gutter:stable handles this at html/body
+     level but mobile browsers vary. Reinforce here. */
+  body.drawer-open {
+    overflow-y: hidden !important;
+    /* Prevent width change when scrollbar disappears */
+    padding-right: 0 !important;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Kill all Y-travel too — smallest screens, fastest loads */
+  .reveal-left,
+  .reveal-right,
+  .reveal-up {
+    transform: none !important;
+    transition: opacity 0.5s ease-out !important;
+  }
+  .reveal-left.visible,
+  .reveal-right.visible,
+  .reveal-up.visible {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+
+/* ─────────────────────────────────────────────────────────────────
+   §10. IMAGES — RESERVE SPACE BEFORE LOAD
+   Images without explicit width/height in HTML cause CLS as the
+   browser first renders them at 0×0 then resizes.
+   For images where we know the ratio, declare aspect-ratio in CSS.
+   ───────────────────────────────────────────────────────────────── */
+
+/* Hero portrait — 3:4 portrait aspect */
+.hero-split-right .hero-portrait-img {
+  aspect-ratio: 3 / 4 !important;
+}
+
+/* About/headshot — 3:4 portrait */
+.about-headshot,
+.about-photo {
+  aspect-ratio: 3 / 4 !important;
+}
+
+/* Listing/sold card photos */
+.lsc-photo-wrap {
+  aspect-ratio: 4 / 3 !important;
+  overflow: hidden !important;
+}
+
+/* Area card images */
+.area-card-img,
+.area-card > img:first-child {
+  aspect-ratio: 4 / 3 !important;
+  width: 100% !important;
+  display: block !important;
+}
+
+/* Network gallery items */
+.ng-item img {
+  aspect-ratio: 4 / 3 !important;
+  width: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+
+/* ─────────────────────────────────────────────────────────────────
+   §11. FLOATING ELEMENTS — COMPOSITOR CONTAINMENT
+   Fixed-position elements (nav, WhatsApp FAB, Ask Carla bubble)
+   should all be in their own compositor layer and not trigger
+   layout recalculation when they animate.
+   ───────────────────────────────────────────────────────────────── */
+
+/* WhatsApp FABs */
+.whatsapp-fab,
+.whatsapp-float {
+  will-change: transform, opacity !important;
+  transform: translateZ(0) !important;
+  /* Prevent layout interaction — fixed position is already out of flow */
+  contain: layout style !important;
+}
+
+/* Ask Carla bubble (managed by ask-carla.js) */
+#ac-bubble {
+  will-change: transform, opacity !important;
+  transform: translateZ(0) !important;
+  contain: layout style !important;
+}
+
+
+/* ─────────────────────────────────────────────────────────────────
+   §12. TICKER ANIMATION — PREVENT PARENT SCROLL
+   The ticker uses an infinite translateX animation. If the parent
+   overflows it can create a horizontal scroll flash.
+   ───────────────────────────────────────────────────────────────── */
+.ticker-bar {
+  overflow: hidden !important;
+  /* Contain the animation within this element */
+  contain: layout !important;
+}
+
+.ticker-track {
+  overflow: hidden !important;
+}
+
+.ticker-inner {
+  will-change: transform !important;
+  /* GPU promote only this element */
+  transform: translateZ(0) !important;
+}
+
+
+/* ─────────────────────────────────────────────────────────────────
+   §13. PREFERS-REDUCED-MOTION — ACCESSIBILITY + STABILITY FALLBACK
+   Users who have requested reduced motion (including some corporate
+   managed devices that default to reduced-motion) should see no
+   animations at all. This also serves as a stability fallback.
+   ───────────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  /* Kill all transitions and animations */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Reveal elements: show immediately, no movement */
+  .reveal-up,
+  .reveal-left,
+  .reveal-right {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  /* Hero video fade-in: skip */
+  .hero-video {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+}
+
+
+/* ─────────────────────────────────────────────────────────────────
+   §14. FONT LOADING CLS PREVENTION
+   Custom fonts (Playfair, Raleway, Cormorant) loading can cause
+   FOIT/FOUT — invisible or reflowed text before font arrives.
+   font-display:swap is set in the Google Fonts URL, but we add
+   a size-adjust hint to minimize the reflow.
+   ───────────────────────────────────────────────────────────────── */
+
+/* Size-adjust ensures fallback font takes approximately the same
+   space as the webfont, preventing text reflow on swap */
+@font-face {
+  font-family: 'Playfair Display';
+  src: local('Georgia');
+  font-weight: 400 700;
+  size-adjust: 98%;
+  unicode-range: U+0020; /* Only apply to space character — minimal impact */
+}
+
+
+/* ─────────────────────────────────────────────────────────────────
+   §15. HERO VIDEO FADE-IN — PREVENT INITIAL FLASH
+   The videoFadeIn animation starts with scale(1.03) which causes
+   an immediate scale-up on load. If the video element is LCP-visible,
+   this creates a layout shift as the browser recalculates compositing.
+   Replace with opacity-only fade — no scale.
+   ───────────────────────────────────────────────────────────────── */
+@keyframes videoFadeIn {
+  from { opacity: 0; }     /* removed scale(1.03) — was causing initial jump */
+  to   { opacity: 1; }
+}
+
+/* Override the animation on the hero video */
+.hero-video {
+  animation: videoFadeIn 1.5s ease-out both !important;
+  /* Keep the -5% transform for slight parallax breathing room
+     but bake it in as a static translate, not part of the animation */
+  transform: translateY(-5%) translateZ(0) !important;
+}
